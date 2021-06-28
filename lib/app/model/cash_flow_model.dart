@@ -33,6 +33,7 @@ class CashFlowModel {
 
   Map<String, dynamic> toJson() {
     return {
+      "createdAt": createdAt.millisecondsSinceEpoch,
       "valueLastDay": valueLastDay,
       "valueToNextDay": valueToNextDay,
       "incomes": incomes != null ? incomes.map((it) => it.toJson()).toList() : [

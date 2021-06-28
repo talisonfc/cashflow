@@ -35,6 +35,7 @@ class CashFlowPageState extends State<CashFlowPage> {
             title: !filter
                 ? Text("Fluxo de caixa")
                 : Wrap(
+                    spacing: 8,
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width / 2,
@@ -56,33 +57,54 @@ class CashFlowPageState extends State<CashFlowPage> {
                               .copyWith(color: Colors.white),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          DateTime end = DateTime.now();
-                          DateTime start = DateTime.now();
-                          start = start.subtract(Duration(days: 1000));
-                          showDatePicker(
-                                  context: context,
-                                  initialDate: end,
-                                  firstDate: start,
-                                  lastDate: end)
-                              .then((value) {
-                            if (value != null)
-                              setState(() {
-                                repository.dateTimeFilter = value;
-                              });
-                          });
-                        },
-                        child: Text(
-                          "Data: " +
-                              DateFormat("dd/MM/yyyy")
-                                  .format(repository.dateTimeFilter),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1
-                              .copyWith(color: Colors.white),
-                        ),
-                      ),
+                      DropdownButton(
+                          hint: Text("Relatórios"),
+                          underline: Container(),
+                          onChanged: repository.setCashFlow,
+                          iconEnabledColor: Colors.white,
+                          iconDisabledColor: Colors.white,
+                          dropdownColor: Theme.of(context).primaryColor,
+                          value: repository.cashFlowModel,
+                          items: repository.businessModel.businessCashFlow
+                              .map((cf) {
+                            return DropdownMenuItem(
+                              value: cf,
+                              child: Text(
+                                DateFormat("dd/MM/yyyy").format(cf.createdAt),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .copyWith(color: Colors.white),
+                              ),
+                            );
+                          }).toList())
+                      // TextButton(
+                      //   onPressed: () {
+                      //     DateTime end = DateTime.now();
+                      //     DateTime start = DateTime.now();
+                      //     start = start.subtract(Duration(days: 1000));
+                      //     showDatePicker(
+                      //             context: context,
+                      //             initialDate: end,
+                      //             firstDate: start,
+                      //             lastDate: end)
+                      //         .then((value) {
+                      //       if (value != null)
+                      //         setState(() {
+                      //           repository.dateTimeFilter = value;
+                      //         });
+                      //     });
+                      //   },
+                      //   child: Text(
+                      //     "Data: " +
+                      //         DateFormat("dd/MM/yyyy")
+                      //             .format(repository.dateTimeFilter),
+                      //     style: Theme.of(context)
+                      //         .textTheme
+                      //         .bodyText1
+                      //         .copyWith(color: Colors.white),
+                      //   ),
+                      // ),
                       // DropdownButton(
                       //     hint: Text("Tipo de pagamento"),
                       //     style: TextStyle(color: Colors.white),
@@ -190,10 +212,8 @@ class CashFlowPageState extends State<CashFlowPage> {
                   },
                   child: Text(
                     "Fechar caixa",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 )
             ],
