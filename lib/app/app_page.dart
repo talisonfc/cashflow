@@ -1,4 +1,4 @@
-import 'package:caixabios/app/cash_flow/cash_flow_page.dart';
+import 'package:caixabios/app/modules/cash_flow/cash_flow_page.dart';
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_elevated_button.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';

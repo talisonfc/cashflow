@@ -1,6 +1,7 @@
-import 'package:caixabios/app/cash_flow/expense_page.dart';
-import 'package:caixabios/app/cash_flow/income_page.dart';
 import 'package:caixabios/app/model/payment_type.dart';
+import 'package:caixabios/app/modules/cash_flow/expense_page.dart';
+import 'package:caixabios/app/modules/cash_flow/income_page.dart';
+import 'package:caixabios/app/modules/cash_flow_drawer.dart';
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class CashFlowPageState extends State<CashFlowPage> {
       length: 2,
       child: Consumer<CashFlowRepository>(
         builder: (ctx, repository, child) => Scaffold(
+          drawer: CashFlowDrawer(),
           appBar: AppBar(
             title: !filter
                 ? Text("Fluxo de caixa")

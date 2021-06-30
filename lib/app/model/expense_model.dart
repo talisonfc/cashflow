@@ -1,7 +1,5 @@
 
 
-import 'package:caixabios/app/cash_flow/widgets/output_options.dart';
-
 class ExpenseModel {
 
   DateTime createdAt;

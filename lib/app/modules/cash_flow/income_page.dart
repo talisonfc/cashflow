@@ -1,7 +1,7 @@
-import 'package:caixabios/app/cash_flow/widgets/card_report.dart';
-import 'package:caixabios/app/cash_flow/widgets/payment_type_options.dart';
 import 'package:caixabios/app/model/income_model.dart';
 import 'package:caixabios/app/model/payment_type.dart';
+import 'package:caixabios/app/modules/cash_flow/widgets/card_report.dart';
+import 'package:caixabios/app/modules/cash_flow/widgets/payment_type_options.dart';
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/fotonica_ui_components/empty.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
