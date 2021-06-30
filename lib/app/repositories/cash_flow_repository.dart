@@ -39,8 +39,10 @@ class CashFlowRepository extends ChangeNotifier {
             bcf.createdAt.year == today.year);
 
     if (tmp.isNotEmpty) {
+      print("[INFO] load business data");
       cashFlowModel = tmp.first;
     } else {
+      print("[INFO] load business data generated");
       CashFlowModel model = CashFlowModel(createdAt: DateTime.now(), expenses: [], incomes: []);
       businessModel.addCashFlow(model);
       cashFlowModel = model;
@@ -73,25 +75,24 @@ class CashFlowRepository extends ChangeNotifier {
   List<IncomeModel> get fiteredIncomes {
     return cashFlowModel.incomes
         .where((it) =>
-            it.clientName.contains(query) &&
-            it.createdAt.year == dateTimeFilter.year &&
-            it.createdAt.month == dateTimeFilter.month &&
-            it.createdAt.day == dateTimeFilter.day)
+            it.clientName.contains(query))
         .toList();
   }
 
   List<ExpenseModel> get fiteredExpenses {
     return cashFlowModel.expenses
         .where((it) =>
-            it.description.contains(query) &&
-            it.createdAt.year == dateTimeFilter.year &&
-            it.createdAt.month == dateTimeFilter.month &&
-            it.createdAt.day == dateTimeFilter.day)
+            it.description.contains(query))
         .toList();
   }
 
   void changeHideValues() {
     this.hideValues = !this.hideValues;
+    notifyListeners();
+  }
+
+  void setCashFlow(CashFlowModel cf){
+    cashFlowModel = cf;
     notifyListeners();
   }
 }
