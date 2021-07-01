@@ -13,7 +13,7 @@ class ExpenseModel {
     createdAt = DateTime.fromMillisecondsSinceEpoch(json["createdAt"]);
     description = json["description"];
     value = json["value"];
-    outputOption = OutputOptionBuilder.build(json["dailyFund"]);
+    outputOption = OutputOptionBuilder.build(json["outputOption"]);
   }
 
   Map<String, dynamic> toJson(){

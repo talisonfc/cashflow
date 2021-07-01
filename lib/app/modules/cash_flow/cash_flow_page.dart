@@ -1,7 +1,6 @@
 import 'package:caixabios/app/model/payment_type.dart';
 import 'package:caixabios/app/modules/cash_flow/expense_page.dart';
 import 'package:caixabios/app/modules/cash_flow/income_page.dart';
-import 'package:caixabios/app/modules/cash_flow_drawer.dart';
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CashFlowPage extends StatefulWidget {
+  final bool filter;
+
+  CashFlowPage({this.filter = false});
+
   @override
   State<StatefulWidget> createState() {
     return CashFlowPageState();
@@ -17,7 +20,6 @@ class CashFlowPage extends StatefulWidget {
 
 class CashFlowPageState extends State<CashFlowPage> {
   bool loading = false;
-  bool filter = false;
 
   PaymentType paymentType;
 
@@ -32,17 +34,47 @@ class CashFlowPageState extends State<CashFlowPage> {
       length: 2,
       child: Consumer<CashFlowRepository>(
         builder: (ctx, repository, child) => Scaffold(
-          drawer: CashFlowDrawer(),
+          // drawer: CashFlowDrawer(),
           appBar: AppBar(
-            title: !filter
-                ? Text("Fluxo de caixa")
+            title: !widget.filter
+                ? Wrap(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                            "Fluxo de caixa (${DateFormat("d MMM yyyy").format(repository.cashFlowModel.createdAt)})"),
+                      ),
+                      IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            DateTime initialDate = repository.cashFlowModel.createdAt;
+                            DateTime firstDate =
+                                DateTime.now().subtract(Duration(days: 7));
+                            DateTime lastDate =
+                                DateTime.now().add(Duration(days: 5));
+                            showDatePicker(
+                                    context: context,
+                                    initialDate: initialDate,
+                                    firstDate: firstDate,
+                                    lastDate: lastDate)
+                                .then((value) {
+                              if (value != null) {
+                                setState(() {
+                                  repository.cashFlowModel.createdAt = value;
+                                  repository.save();
+                                });
+                              }
+                            });
+                          })
+                    ],
+                  )
                 : Wrap(
                     spacing: 8,
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width / 2,
                         child: FotonicaTextField(
-                          placeholder: "Buscar",
+                          placeholder: "Escreva aqui..",
                           filled: false,
                           onChange: (v) {
                             setState(() {
@@ -59,27 +91,37 @@ class CashFlowPageState extends State<CashFlowPage> {
                               .copyWith(color: Colors.white),
                         ),
                       ),
-                      DropdownButton(
-                          hint: Text("Relatórios"),
-                          underline: Container(),
-                          onChanged: repository.setCashFlow,
-                          iconEnabledColor: Colors.white,
-                          iconDisabledColor: Colors.white,
-                          dropdownColor: Theme.of(context).primaryColor,
-                          value: repository.cashFlowModel,
-                          items: repository.businessModel.businessCashFlow
-                              .map((cf) {
-                            return DropdownMenuItem(
-                              value: cf,
-                              child: Text(
-                                DateFormat("dd/MM/yyyy").format(cf.createdAt),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    .copyWith(color: Colors.white),
-                              ),
-                            );
-                          }).toList())
+                      Wrap(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 12),
+                            child: Text("Data:"),
+                          ),
+                          DropdownButton(
+                              hint: Text("Relatórios"),
+                              underline: Container(),
+                              onChanged: repository.setCashFlow,
+                              iconEnabledColor: Colors.white,
+                              iconDisabledColor: Colors.white,
+                              dropdownColor: Theme.of(context).primaryColor,
+                              value: repository.cashFlowModel,
+                              items: repository.businessModel.businessCashFlow
+                                  .map((cf) {
+                                return DropdownMenuItem(
+                                  value: cf,
+                                  child: Text(
+                                    DateFormat("d MMM yyyy")
+                                        .format(cf.createdAt),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                );
+                              }).toList()),
+                        ],
+                      )
                       // TextButton(
                       //   onPressed: () {
                       //     DateTime end = DateTime.now();
@@ -149,17 +191,7 @@ class CashFlowPageState extends State<CashFlowPage> {
                   onPressed: () {
                     repository.changeHideValues();
                   }),
-              IconButton(
-                  icon: Icon(filter ? Icons.close : Icons.search),
-                  onPressed: () {
-                    if (!filter) {
-                      repository.dateTimeFilter = DateTime.now();
-                    }
-                    setState(() {
-                      filter = !filter;
-                    });
-                  }),
-              if (!filter)
+              if (!widget.filter)
                 TextButton(
                   onPressed: () {
                     showDialog(
@@ -221,7 +253,16 @@ class CashFlowPageState extends State<CashFlowPage> {
             ],
           ),
           body: TabBarView(
-            children: [IncomePage(), ExpensePage()],
+            children: [
+              IncomePage(
+                hideAddBtn: widget.filter,
+                hideRemoveBtn: widget.filter,
+              ),
+              ExpensePage(
+                hideAddBtn: widget.filter,
+                hideRemoveBtn: widget.filter,
+              )
+            ],
           ),
         ),
       ),

@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class IncomePage extends StatefulWidget {
+  final bool hideAddBtn;
+  final bool hideRemoveBtn;
+
+  IncomePage({this.hideAddBtn = false, this.hideRemoveBtn = false});
+
   @override
   State<StatefulWidget> createState() {
     return IncomePageState();
@@ -97,13 +102,14 @@ class IncomePageState extends State<IncomePage> {
         child: Column(
           // shrinkWrap: true,
           children: [
-            TextButton.icon(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  incomeModel = IncomeModel(createdAt: DateTime.now());
-                  showForm(repository);
-                },
-                label: Text("Nova entrada")),
+            if (!widget.hideAddBtn)
+              TextButton.icon(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    incomeModel = IncomeModel(createdAt: DateTime.now());
+                    showForm(repository);
+                  },
+                  label: Text("Nova entrada")),
             Expanded(
               child: Card(
                 child: repository.fiteredIncomes.isNotEmpty
@@ -121,35 +127,36 @@ class IncomePageState extends State<IncomePage> {
                                       const EdgeInsets.symmetric(vertical: 4.0),
                                   child: Text(ic.createdAt.toIso8601String()),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (ctx) {
-                                          return SimpleDialog(
-                                            title: Text(
-                                                "Tem certeza que deseja remover?"),
-                                            children: [
-                                              SimpleDialogActions(
-                                                value: true,
-                                              )
-                                            ],
-                                          );
-                                        }).then((confirm) {
-                                      if (confirm != null) {
-                                        setState(() {
-                                          repository.cashFlowModel.incomes
-                                              .remove(ic);
-                                          repository.save();
-                                        });
-                                      }
-                                    });
-                                  },
-                                  child: Chip(
-                                    label: Text("Remover"),
-                                    backgroundColor: Colors.transparent,
-                                  ),
-                                )
+                                if (!widget.hideRemoveBtn)
+                                  InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (ctx) {
+                                            return SimpleDialog(
+                                              title: Text(
+                                                  "Tem certeza que deseja remover?"),
+                                              children: [
+                                                SimpleDialogActions(
+                                                  value: true,
+                                                )
+                                              ],
+                                            );
+                                          }).then((confirm) {
+                                        if (confirm != null) {
+                                          setState(() {
+                                            repository.cashFlowModel.incomes
+                                                .remove(ic);
+                                            repository.save();
+                                          });
+                                        }
+                                      });
+                                    },
+                                    child: Chip(
+                                      label: Text("Remover"),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  )
                               ],
                             ),
                             trailing: Wrap(
@@ -194,12 +201,19 @@ class IncomePageState extends State<IncomePage> {
                   value:
                       "R\$ ${repository.cashFlowModel.totalExpense.toStringAsFixed(2)}",
                 ),
+                if (repository.cashFlowModel.valueToNextDay != null)
+                  CardReport(
+                    title: "Saldo para o próximo dia",
+                    textValueColor: Colors.green,
+                    value:
+                    "R\$ ${repository.cashFlowModel.valueToNextDay.toStringAsFixed(2)}",
+                  ),
                 CardReport(
                   title: "Saldo",
                   textValueColor: Theme.of(context).accentColor,
                   value:
                       "R\$ ${repository.cashFlowModel.saldo.toStringAsFixed(2)}",
-                )
+                ),
               ],
             )
           ],

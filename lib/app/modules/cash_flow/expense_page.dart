@@ -1,4 +1,3 @@
-
 import 'package:caixabios/app/model/expense_model.dart';
 import 'package:caixabios/app/modules/cash_flow/widgets/card_report.dart';
 import 'package:caixabios/app/modules/cash_flow/widgets/output_options.dart';
@@ -10,6 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ExpensePage extends StatefulWidget {
+  final bool hideAddBtn;
+  final bool hideRemoveBtn;
+
+  ExpensePage({this.hideAddBtn = false, this.hideRemoveBtn = false});
+
   @override
   State<StatefulWidget> createState() {
     return ExpensePageState();
@@ -91,98 +95,116 @@ class ExpensePageState extends State<ExpensePage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<CashFlowRepository>(
-      builder: (ctx, repository, child) => Column(
-        children: [
-          TextButton.icon(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              expense = ExpenseModel(createdAt: DateTime.now());
-              showForm(repository);
-            },
-            label: Text("Nova saída"),
-          ),
-          Expanded(
-            child: Card(
-              child: repository.fiteredExpenses.isNotEmpty
-                  ? ListView(
-                      shrinkWrap: true,
-                      primary: false,
-                      children: repository.fiteredExpenses.map((ic) {
-                        return ListTile(
-                          title: Text(ic.description),
-                          subtitle: Wrap(
-                            spacing: 8,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4.0),
-                                child: Text(ic.createdAt.toIso8601String()),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (ctx) {
-                                        return SimpleDialog(
-                                          title: Text(
-                                              "Tem certeza que deseja remover?"),
-                                          children: [
-                                            SimpleDialogActions(
-                                              value: true,
-                                            )
-                                          ],
-                                        );
-                                      }).then((confirm) {
-                                    if (confirm != null) {
-                                      setState(() {
-                                        repository.cashFlowModel.expenses
-                                            .remove(ic);
-                                        repository.save();
+      builder: (ctx, repository, child) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            if (!widget.hideAddBtn)
+              TextButton.icon(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  expense = ExpenseModel(createdAt: DateTime.now());
+                  showForm(repository);
+                },
+                label: Text("Nova saída"),
+              ),
+            Expanded(
+              child: Card(
+                child: repository.fiteredExpenses.isNotEmpty
+                    ? ListView(
+                        shrinkWrap: true,
+                        primary: false,
+                        children: repository.fiteredExpenses.map((ic) {
+                          return ListTile(
+                            title: Text(ic.description),
+                            subtitle: Wrap(
+                              spacing: 8,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Text(ic.createdAt.toIso8601String()),
+                                ),
+                                if (!widget.hideRemoveBtn)
+                                  InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (ctx) {
+                                            return SimpleDialog(
+                                              title: Text(
+                                                  "Tem certeza que deseja remover?"),
+                                              children: [
+                                                SimpleDialogActions(
+                                                  value: true,
+                                                )
+                                              ],
+                                            );
+                                          }).then((confirm) {
+                                        if (confirm != null) {
+                                          setState(() {
+                                            repository.cashFlowModel.expenses
+                                                .remove(ic);
+                                            repository.save();
+                                          });
+                                        }
                                       });
-                                    }
-                                  });
-                                },
-                                child: Chip(
-                                  label: Text("Remover"),
+                                    },
+                                    child: Chip(
+                                      label: Text("Remover"),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  )
+                              ],
+                            ),
+                            trailing: Wrap(
+                              spacing: 8,
+                              children: [
+                                Chip(
+                                  label:
+                                      Text(ic.outputOption.name() ?? "Output"),
                                   backgroundColor: Colors.transparent,
                                 ),
-                              )
-                            ],
-                          ),
-                          trailing: Wrap(
-                            spacing: 8,
-                            children: [
-                              Chip(
-                                label: Text(ic.outputOption.name() ?? "Output"),
-                                backgroundColor: Colors.transparent,
-                              ),
-                              Chip(
-                                label: Text(repository.hideValues
-                                    ? "-"
-                                    : "R\$ " + ic.value?.toStringAsFixed(2)),
-                                backgroundColor: Colors.transparent,
-                              )
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    )
-                  : Empty(
-                      message: "Nenhuma saída disponível!",
-                    ),
+                                Chip(
+                                  label: Text(repository.hideValues
+                                      ? "-"
+                                      : "R\$ " + ic.value?.toStringAsFixed(2)),
+                                  backgroundColor: Colors.transparent,
+                                )
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      )
+                    : Empty(
+                        message: "Nenhuma saída disponível!",
+                      ),
+              ),
             ),
-          ),
-          Wrap(
-            children: [
-              CardReport(
-                title: "Despesas do dia",
-                textValueColor: Theme.of(context).hintColor,
-                value:
-                    "R\$ ${repository.cashFlowModel.totalExpense.toStringAsFixed(2)}",
-              )
-            ],
-          )
-        ],
+            Wrap(
+              children: [
+                CardReport(
+                  title: "Despesas pagas do caixa",
+                  textValueColor: Theme.of(context).hintColor,
+                  value:
+                  "R\$ ${repository.cashFlowModel.expenseFromLocal.toStringAsFixed(2)}",
+                ),
+                CardReport(
+                  title: "Despesas pagas da conta",
+                  textValueColor: Theme.of(context).hintColor,
+                  value:
+                  "R\$ ${repository.cashFlowModel.expenseFromGeral.toStringAsFixed(2)}",
+                ),
+                CardReport(
+                  title: "Despesas do dia",
+                  textValueColor: Theme.of(context).hintColor,
+                  value:
+                      "R\$ ${repository.cashFlowModel.totalExpense.toStringAsFixed(2)}",
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
