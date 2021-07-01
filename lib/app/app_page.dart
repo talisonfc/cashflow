@@ -72,23 +72,21 @@ class AppPageState extends State<AppPage> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle bodyText1 = Theme.of(context)
-        .textTheme
-        .bodyText1
-        .copyWith(fontSize: 20);
+    TextStyle bodyText1 =
+        Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 20);
 
     return Consumer<CashFlowRepository>(
       builder: (ctx, repository, child) => Scaffold(
           body: Center(
         child: Wrap(
-          direction: Axis.vertical,
+          direction: Axis.horizontal,
+          alignment: WrapAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                "BioS Diagnóstico",
-                style: Theme.of(context).textTheme.headline3,
-              ),
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                  width: 500,
+                  child: Image.asset("assets/images/biosdiagnostico.png")),
             ),
             Wrap(
               children: [
@@ -119,7 +117,10 @@ class AppPageState extends State<AppPage> {
                     },
                     label: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("Consultar caixa", style: bodyText1,),
+                      child: Text(
+                        "Consultar caixa",
+                        style: bodyText1,
+                      ),
                     ),
                     icon: Icon(Icons.search),
                   ),
@@ -132,7 +133,10 @@ class AppPageState extends State<AppPage> {
                     },
                     label: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("Relatórios financeiros", style: bodyText1,),
+                      child: Text(
+                        "Relatórios financeiros",
+                        style: bodyText1,
+                      ),
                     ),
                     icon: Icon(Icons.picture_as_pdf),
                   ),
