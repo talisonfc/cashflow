@@ -13,6 +13,8 @@ class CashFlowRepository extends ChangeNotifier {
   CashFlowModel cashFlowModel =
       CashFlowModel(incomes: [], expenses: [], createdAt: DateTime.now());
 
+  CashFlowModel todayCashFlow;
+
   BusinessModel businessModel = BusinessModel(businessCashFlow: []);
   bool hideValues = false;
   ReportType reportType = ReportType.daily;
@@ -109,5 +111,10 @@ class CashFlowRepository extends ChangeNotifier {
   void setCashFlow(CashFlowModel cf) {
     cashFlowModel = cf;
     notifyListeners();
+  }
+
+  void setTodayCashFlow(){
+    cashFlowModel = this.businessModel.businessCashFlow.last;
+    // notifyListeners();
   }
 }

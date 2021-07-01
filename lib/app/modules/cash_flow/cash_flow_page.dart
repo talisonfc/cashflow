@@ -26,6 +26,7 @@ class CashFlowPageState extends State<CashFlowPage> {
   @override
   void initState() {
     super.initState();
+    Provider.of<CashFlowRepository>(context, listen: false).setTodayCashFlow();
   }
 
   @override
