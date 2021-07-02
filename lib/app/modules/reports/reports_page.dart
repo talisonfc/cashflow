@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:caixabios/app/model/cash_flow_model.dart';
+import 'package:caixabios/app/model/expense_model.dart';
 import 'package:caixabios/app/model/month_report_model.dart';
+import 'package:caixabios/app/model/payment_type.dart';
 import 'package:caixabios/app/modules/cash_flow/expense_page.dart';
 import 'package:caixabios/app/modules/cash_flow/income_page.dart';
 import 'package:caixabios/app/modules/cash_flow/widgets/card_report.dart';
@@ -8,8 +11,10 @@ import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/app/types/report_type.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
 class ReportsPage extends StatefulWidget {
@@ -248,8 +253,8 @@ class ReportsPageState extends State<ReportsPage>
                                                     .textTheme
                                                     .bodyText1
                                                     .copyWith(
-                                                    color: Theme.of(context)
-                                                        .hintColor),
+                                                        color: Theme.of(context)
+                                                            .hintColor),
                                               ),
                                               TextSpan(
                                                 text: mrm.totalExpense
@@ -275,28 +280,142 @@ class ReportsPageState extends State<ReportsPage>
                     ),
                     CardReport(
                       title: "Despesa total",
-                      text:
-                          monthReportModel.totalExpense?.toString() ?? "0.00",
+                      text: monthReportModel.totalExpense?.toString() ?? "0.00",
                     )
                   ],
                 ),
               TextButton.icon(
                   onPressed: () async {
+                    Directory tempDir = await getTemporaryDirectory();
+                    String tempPath = tempDir.path;
+
+                    // File f = File("$tempPath/example.pdf");
+
                     // final Uint8List fontData = File('open-sans.ttf').readAsBytesSync();
                     // final ttf = pw.Font.ttf(fontData.buffer.asByteData());
                     final pdf = pw.Document();
-                    pdf.addPage(pw.Page(
+                    pdf.addPage(pw.MultiPage(
                         pageFormat: PdfPageFormat.a4,
                         build: (pw.Context context) {
-                          return pw.Center(
-                            child: pw.Text('Hello World',
-                                style: pw.TextStyle(fontSize: 40)),
-                          ); // Center
+                          List<List<String>> table1 = [
+                            ["Cliente", "Forma de pagamento", "Valor"]
+                          ];
+
+                          table1
+                              .addAll(repository.cashFlowModel.incomes.map((e) {
+                            return [
+                              e.clientName,
+                              e.paymentType.name(),
+                              e.value.toString()
+                            ];
+                          }));
+
+                          List<List<String>> table2 = [
+                            ["Descrição", "Origem da receita", "Valor"]
+                          ];
+
+                          table2.addAll(
+                              repository.cashFlowModel.expenses.map((e) {
+                            return [
+                              e.description,
+                              e.outputOption.name(),
+                              e.value.toString()
+                            ];
+                          }));
+
+                          CashFlowModel cfm = repository.cashFlowModel;
+                          Map<String, dynamic> resumo = {
+                            "Saldo dia anterior": {
+                              "text":
+                                  "R\$ ${cfm.valueLastDay.toStringAsFixed(2)}"
+                            },
+                            "Receita do dia": {
+                              "text":
+                                  "R\$ ${cfm.totalIncome.toStringAsFixed(2)}\n",
+                              "infos": [
+                                pw.TextSpan(
+                                    text: "Receita em espécie\n",
+                                    style: styleTitle),
+                                pw.TextSpan(
+                                    text:
+                                        "R\$ ${cfm.totalCash.toStringAsFixed(2)}\n",
+                                    style: styleText),
+                                pw.TextSpan(
+                                    text: "Receita débito/pix\n",
+                                    style: styleTitle),
+                                pw.TextSpan(
+                                    text:
+                                        "R\$ ${cfm.totalDebitPix.toStringAsFixed(2)}\n",
+                                    style: styleText),
+                                pw.TextSpan(
+                                    text: "Receita credito\n",
+                                    style: styleTitle),
+                                pw.TextSpan(
+                                    text:
+                                        "R\$ ${cfm.totalCredit.toStringAsFixed(2)}\n",
+                                    style: styleText)
+                              ]
+                            },
+                            "Despesas do dia": {
+                              "text":
+                                  "R\$ ${cfm.expenseFromLocal.toStringAsFixed(2)}"
+                            },
+                            "Saldo para o próximo dia": {
+                              "text":
+                                  "R\$ ${cfm.valueToNextDay.toStringAsFixed(2)}"
+                            },
+                            "Saldo em espécie": {
+                              "text": "R\$ ${cfm.saldoLocal.toStringAsFixed(2)}"
+                            }
+                          };
+
+                          return [
+                            pw.Text("Bios Diagnóstico"),
+                            pw.Text("Data: ${DateFormat("dd/MM/yyyy").format(cfm.createdAt)}"),
+                            pw.SizedBox(height: 8),
+                            pw.Text("Resumo"),
+                            pw.SizedBox(height: 8),
+                            pw.Wrap(
+                              children: resumo
+                                  .map((key, value) {
+                                    return MapEntry(
+                                        key,
+                                        pdfCardReport(
+                                            title: key,
+                                            text: value["text"],
+                                            infos: value["infos"]));
+                                  })
+                                  .values
+                                  .toList(),
+                            ),
+                            pw.SizedBox(height: 8),
+                            pw.Text("Receita"),
+                            pw.SizedBox(height: 8),
+                            pw.Table.fromTextArray(
+                                data: table1, context: context),
+                            pw.SizedBox(height: 8),
+                            pw.Text("Despesas"),
+                            pw.SizedBox(height: 8),
+                            pw.Table.fromTextArray(
+                                data: table2, context: context)
+                          ];
                         })); // Page
 
-                    File file = File(
-                        "/Users/talisoncosta/Documents/fotonica/caixabios/example.pdf");
-                    await file.writeAsBytes(await pdf.save());
+                    // File file = File("$tempPath/example.pdf");
+                    // print(await pdf.save());
+                    // await file.writeAsBytes(await pdf.save());
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => Scaffold(
+                                  appBar: AppBar(
+                                    title: Text(
+                                        "Relatório ${DateFormat("EEE mm yyyy").format(repository.cashFlowModel.createdAt)}"),
+                                  ),
+                                  body: PdfPreview(
+                                    build: (format) => pdf.save(),
+                                  ),
+                                )));
                     // await Printing.layoutPdf(
                     //     onLayout: (PdfPageFormat format) async => pdf.save());
                   },
@@ -313,6 +432,33 @@ class ReportsPageState extends State<ReportsPage>
           ),
         );
       },
+    );
+  }
+
+  final pw.TextStyle styleTitle = pw.TextStyle(fontSize: 9);
+  final pw.TextStyle styleText =
+      pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold);
+
+  pw.Container pdfCardReport(
+      {String title, String text, List<pw.TextSpan> infos}) {
+    List<pw.TextSpan> content = [
+      pw.TextSpan(text: "$title\n", style: styleTitle),
+      pw.TextSpan(text: "R\$ $text", style: styleText),
+    ];
+
+    if (infos != null) {
+      content.addAll(infos);
+    }
+
+    return pw.Container(
+      padding: pw.EdgeInsets.all(8),
+      decoration:
+          pw.BoxDecoration(border: pw.Border.all(color: PdfColor.fromInt(0))),
+      child: pw.RichText(
+        text: pw.TextSpan(
+          children: content,
+        ),
+      ),
     );
   }
 }
