@@ -3,6 +3,7 @@ import 'package:caixabios/app/modules/reports/reports_page.dart';
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_elevated_button.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
+import 'package:caixabios/fotonica_ui_components/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +31,7 @@ class AppPageState extends State<AppPage> {
                   child: FotonicaTextField(
                     placeholder: "Saldo",
                     type: TextInputType.number,
+                    inputFormatters: [InputFormatters.number()],
                     controller: TextEditingController(
                         text:
                             repository.cashFlowModel.valueLastDay?.toString()),

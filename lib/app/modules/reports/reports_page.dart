@@ -271,11 +271,11 @@ class ReportsPageState extends State<ReportsPage>
                   children: [
                     CardReport(
                       title: "Receita total",
-                      value: monthReportModel.totalIncome?.toString() ?? "0.00",
+                      text: monthReportModel.totalIncome?.toString() ?? "0.00",
                     ),
                     CardReport(
                       title: "Despesa total",
-                      value:
+                      text:
                           monthReportModel.totalExpense?.toString() ?? "0.00",
                     )
                   ],

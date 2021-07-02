@@ -4,6 +4,7 @@ import 'package:caixabios/app/modules/cash_flow/widgets/output_options.dart';
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/fotonica_ui_components/empty.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
+import 'package:caixabios/fotonica_ui_components/input_formatters.dart';
 import 'package:caixabios/fotonica_ui_components/simple_dialog_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +53,7 @@ class ExpensePageState extends State<ExpensePage> {
                           label: "Valor",
                           controller: TextEditingController(
                               text: expense.value?.toString()),
+                          inputFormatters: [InputFormatters.number()],
                           onChange: (v) {
                             if (v != null) expense.value = double.parse(v);
                           },
@@ -94,6 +96,8 @@ class ExpensePageState extends State<ExpensePage> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle hintStyle = Theme.of(context).textTheme.bodyText1.copyWith(color: Theme.of(context).hintColor);
+
     return Consumer<CashFlowRepository>(
       builder: (ctx, repository, child) => Padding(
         padding: const EdgeInsets.all(8.0),
@@ -184,22 +188,26 @@ class ExpensePageState extends State<ExpensePage> {
             Wrap(
               children: [
                 CardReport(
-                  title: "Despesas pagas do caixa",
-                  textValueColor: Theme.of(context).hintColor,
-                  value:
-                  "R\$ ${repository.cashFlowModel.expenseFromLocal.toStringAsFixed(2)}",
-                ),
-                CardReport(
-                  title: "Despesas pagas da conta",
-                  textValueColor: Theme.of(context).hintColor,
-                  value:
-                  "R\$ ${repository.cashFlowModel.expenseFromGeral.toStringAsFixed(2)}",
-                ),
-                CardReport(
                   title: "Despesas do dia",
                   textValueColor: Theme.of(context).hintColor,
-                  value:
-                      "R\$ ${repository.cashFlowModel.totalExpense.toStringAsFixed(2)}",
+                  text:
+                      "R\$ ${repository.cashFlowModel.totalExpense.toStringAsFixed(2)}\n",
+                  adicionalInfos: [
+                    TextSpan(
+                        text: "Caixa do dia\n",
+                        style: hintStyle
+                    ),
+                    TextSpan(
+                        text: "R\$ ${repository.cashFlowModel.expenseFromLocal.toStringAsFixed(2)}\n"
+                    ),
+                    TextSpan(
+                        text: "Caixa geral\n",
+                        style: hintStyle
+                    ),
+                    TextSpan(
+                        text: "R\$ ${repository.cashFlowModel.expenseFromGeral.toStringAsFixed(2)}\n"
+                    ),
+                  ],
                 )
               ],
             )

@@ -3,6 +3,7 @@ import 'package:caixabios/app/modules/cash_flow/expense_page.dart';
 import 'package:caixabios/app/modules/cash_flow/income_page.dart';
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
+import 'package:caixabios/fotonica_ui_components/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -211,6 +212,7 @@ class CashFlowPageState extends State<CashFlowPage> {
                                       text: repository
                                           .cashFlowModel.valueToNextDay
                                           ?.toString()),
+                                  inputFormatters: [InputFormatters.number()],
                                   onChange: (v) {
                                     if (v != null) {
                                       repository.cashFlowModel.valueToNextDay =

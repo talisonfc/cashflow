@@ -5,8 +5,10 @@ import 'package:caixabios/app/modules/cash_flow/widgets/payment_type_options.dar
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/fotonica_ui_components/empty.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
+import 'package:caixabios/fotonica_ui_components/input_formatters.dart';
 import 'package:caixabios/fotonica_ui_components/simple_dialog_actions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class IncomePage extends StatefulWidget {
@@ -50,7 +52,8 @@ class IncomePageState extends State<IncomePage> {
                         ),
                         FotonicaTextField(
                           label: "Valor",
-                          type: TextInputType.number,
+                          type: TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [InputFormatters.number()],
                           controller: TextEditingController(
                               text: incomeModel.value?.toString()),
                           onChange: (v) {
@@ -96,6 +99,8 @@ class IncomePageState extends State<IncomePage> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle hintStyle = Theme.of(context).textTheme.bodyText1.copyWith(color: Theme.of(context).hintColor);
+
     return Consumer<CashFlowRepository>(
       builder: (ctx, repository, child) => Padding(
         padding: const EdgeInsets.all(8.0),
@@ -118,7 +123,7 @@ class IncomePageState extends State<IncomePage> {
                         primary: false,
                         children: repository.fiteredIncomes.map((ic) {
                           return ListTile(
-                            title: Text(ic.clientName),
+                            title: Text(ic.clientName ?? "Nome do cliente"),
                             subtitle: Wrap(
                               spacing: 8,
                               children: [
@@ -163,7 +168,7 @@ class IncomePageState extends State<IncomePage> {
                               spacing: 8,
                               children: [
                                 Chip(
-                                  label: Text(ic.paymentType.name()),
+                                  label: Text(ic.paymentType.name() ?? "Tipo de pagamento"),
                                   backgroundColor: Colors.transparent,
                                 ),
                                 Chip(
@@ -186,33 +191,74 @@ class IncomePageState extends State<IncomePage> {
               children: [
                 CardReport(
                   title: "Saldo dia anterior",
-                  value:
+                  value: repository.cashFlowModel.valueLastDay,
+                  text:
                       "R\$ ${repository.cashFlowModel.valueLastDay.toStringAsFixed(2)}",
+                  onChanged: widget.hideAddBtn ? null : (v){
+                    if(v != null){
+                      setState(() {
+                        repository.cashFlowModel.valueLastDay = double.parse(v);
+                        repository.save();
+                      });
+                    }
+                  },
                 ),
                 CardReport(
                   title: "Receita do dia",
                   textValueColor: Theme.of(context).primaryColor,
-                  value:
-                      "R\$ ${repository.cashFlowModel.totalIncome.toStringAsFixed(2)}",
+                  text:
+                      "R\$ ${repository.cashFlowModel.totalIncome.toStringAsFixed(2)}\n",
+                  adicionalInfos: [
+                    TextSpan(
+                      text: "Receita espécie\n",
+                      style: hintStyle
+                    ),
+                    TextSpan(
+                        text: "R\$ ${repository.cashFlowModel.totalCash.toStringAsFixed(2)}\n"
+                    ),
+                    TextSpan(
+                        text: "Receita débito/pix\n",
+                        style: hintStyle
+                    ),
+                    TextSpan(
+                        text: "R\$ ${repository.cashFlowModel.totalDebitPix.toStringAsFixed(2)}\n"
+                    ),
+                    TextSpan(
+                        text: "Receita credito\n",
+                        style: hintStyle
+                    ),
+                    TextSpan(
+                        text: "R\$ ${repository.cashFlowModel.totalCredit.toStringAsFixed(2)}\n"
+                    )
+                  ],
                 ),
                 CardReport(
                   title: "Despesas do dia",
                   textValueColor: Theme.of(context).hintColor,
-                  value:
-                      "R\$ ${repository.cashFlowModel.totalExpense.toStringAsFixed(2)}",
+                  text:
+                      "R\$ ${repository.cashFlowModel.expenseFromLocal.toStringAsFixed(2)}"
                 ),
                 if (repository.cashFlowModel.valueToNextDay != null)
                   CardReport(
                     title: "Saldo para o próximo dia",
                     textValueColor: Colors.green,
-                    value:
-                    "R\$ ${repository.cashFlowModel.valueToNextDay.toStringAsFixed(2)}",
+                    value: repository.cashFlowModel.valueToNextDay,
+                    onChanged: widget.hideAddBtn ? null :  (v){
+                      if(v != null){
+                        setState(() {
+                          repository.cashFlowModel.valueToNextDay = double.parse(v);
+                        });
+                        repository.save();
+                      }
+                    },
+                    text:
+                        "R\$ ${repository.cashFlowModel.valueToNextDay.toStringAsFixed(2)}",
                   ),
                 CardReport(
-                  title: "Saldo",
+                  title: "Saldo em espécie",
                   textValueColor: Theme.of(context).accentColor,
-                  value:
-                      "R\$ ${repository.cashFlowModel.saldo.toStringAsFixed(2)}",
+                  text:
+                      "R\$ ${repository.cashFlowModel.saldoLocal.toStringAsFixed(2)}"
                 ),
               ],
             )

@@ -88,7 +88,7 @@ class CashFlowRepository extends ChangeNotifier {
 
   List<IncomeModel> get fiteredIncomes {
     return cashFlowModel.incomes
-        .where((it) => it.clientName.contains(query))
+        .where((it) => it.clientName == null || it.clientName.contains(query))
         .toList();
   }
 

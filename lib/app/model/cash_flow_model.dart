@@ -1,5 +1,6 @@
 import 'package:caixabios/app/model/expense_model.dart';
 import 'package:caixabios/app/model/income_model.dart';
+import 'package:caixabios/app/model/payment_type.dart';
 
 class CashFlowModel {
   DateTime createdAt;
@@ -7,6 +8,7 @@ class CashFlowModel {
   List<ExpenseModel> expenses;
   double valueLastDay;
   double valueToNextDay;
+  double saldoCaixaGeral;
 
   CashFlowModel(
       {this.createdAt,
@@ -65,6 +67,18 @@ class CashFlowModel {
     return s;
   }
 
+  double get saldoLocal {
+    double s = totalCash + valueLastDay - expenseFromLocal;
+    if (valueToNextDay != null) s -= valueToNextDay;
+    return s;
+  }
+
+  double get saldoGeral {
+    double s = totalDebitPix + totalCredit - expenseFromGeral;
+    if (valueToNextDay != null) s -= valueToNextDay;
+    return s;
+  }
+
   double get totalExpense {
     double total = 0;
     expenses.forEach((el) {
@@ -88,6 +102,42 @@ class CashFlowModel {
   double get expenseFromGeral {
     double total = 0;
     expenses.where((e) => e.outputOption == OutputOption.geral).forEach((el) {
+      if (el != null) {
+        total += el.value;
+      }
+    });
+    return total;
+  }
+
+  double get totalCash {
+    double total = 0;
+    incomes.where((e) => e.paymentType == PaymentType.cash).forEach((el) {
+      if (el != null) {
+        total += el.value;
+      }
+    });
+    return total;
+  }
+
+  double get totalCredit {
+    double total = 0;
+    incomes
+        .where((e) => e.paymentType == PaymentType.credit_card)
+        .forEach((el) {
+      if (el != null) {
+        total += el.value;
+      }
+    });
+    return total;
+  }
+
+  double get totalDebitPix {
+    double total = 0;
+    incomes
+        .where((e) =>
+            e.paymentType == PaymentType.debit_card ||
+            e.paymentType == PaymentType.pix)
+        .forEach((el) {
       if (el != null) {
         total += el.value;
       }
