@@ -54,7 +54,7 @@ class CashFlowModel {
   double get totalIncome {
     double total = 0;
     incomes.forEach((el) {
-      if (el != null) {
+      if (el != null && el.value != null) {
         total += el.value;
       }
     });
@@ -82,7 +82,7 @@ class CashFlowModel {
   double get totalExpense {
     double total = 0;
     expenses.forEach((el) {
-      if (el != null) {
+      if (el != null && el.value != null) {
         total += el.value;
       }
     });
@@ -102,7 +102,7 @@ class CashFlowModel {
   double get expenseFromGeral {
     double total = 0;
     expenses.where((e) => e.outputOption == OutputOption.geral).forEach((el) {
-      if (el != null) {
+      if (el != null && el.value != null) {
         total += el.value;
       }
     });

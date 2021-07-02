@@ -34,11 +34,13 @@ class FotonicaTextField extends StatefulWidget {
   final String tooltipText;
   final TextInputAction textInputAction;
   final EdgeInsets contentPadding;
+  final Function(String) onSubmitted;
 
   FotonicaTextField(
       {Key key,
       this.label,
       this.placeholder,
+      this.onSubmitted,
       this.controller,
       this.autovalidade,
       this.onChange,
@@ -159,6 +161,7 @@ class _FotonicaTextField extends State<FotonicaTextField> {
               keyboardType:
                   widget.type != null ? widget.type : TextInputType.text,
               textInputAction: widget.textInputAction,
+              onFieldSubmitted: widget.onSubmitted,
               decoration: InputDecoration(
                 prefixIcon: widget.prefixIcon,
                 filled: widget.filled,
@@ -180,8 +183,9 @@ class _FotonicaTextField extends State<FotonicaTextField> {
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.zero,
                     borderSide: BorderSide.none),
-                contentPadding: widget.contentPadding != null ? widget.contentPadding :
-                    EdgeInsets.only(left: 16, top: 6, bottom: 6, right: 16),
+                contentPadding: widget.contentPadding != null
+                    ? widget.contentPadding
+                    : EdgeInsets.only(left: 16, top: 6, bottom: 6, right: 16),
                 // labelText: placeholder,
                 labelStyle: widget.textStyleLabel != null
                     ? widget.textStyleLabel

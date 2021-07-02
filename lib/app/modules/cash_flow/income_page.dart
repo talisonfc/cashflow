@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:caixabios/app/model/income_model.dart';
 import 'package:caixabios/app/model/payment_type.dart';
 import 'package:caixabios/app/modules/cash_flow/widgets/card_report.dart';
@@ -26,7 +28,14 @@ class IncomePage extends StatefulWidget {
 class IncomePageState extends State<IncomePage> {
   IncomeModel incomeModel = IncomeModel();
 
+  FocusNode focusClient = FocusNode();
+
   void showForm(CashFlowRepository repository) {
+
+    Timer(Duration(seconds: 1), (){
+      focusClient.nextFocus();
+    });
+
     showDialog(
         context: context,
         builder: (ctx) {
@@ -43,12 +52,13 @@ class IncomePageState extends State<IncomePage> {
                       shrinkWrap: true,
                       children: [
                         FotonicaTextField(
+                          focusNode: focusClient,
                           label: "Cliente",
                           controller: TextEditingController(
                               text: incomeModel.clientName),
                           onChange: (v) {
                             incomeModel.clientName = v;
-                          },
+                          }
                         ),
                         FotonicaTextField(
                           label: "Valor",
@@ -77,12 +87,14 @@ class IncomePageState extends State<IncomePage> {
                             ),
                             TextButton(
                                 onPressed: () {
+                                  incomeModel.createdAt = DateTime.now();
                                   setState(() {
                                     repository.cashFlowModel
                                         .addIncome(incomeModel);
+                                    incomeModel = new IncomeModel(createdAt: DateTime.now());
                                   });
                                   repository.save();
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, true);
                                 },
                                 child: Text("Salvar"))
                           ],
@@ -94,7 +106,11 @@ class IncomePageState extends State<IncomePage> {
               )
             ],
           );
-        });
+        }).then((value){
+          if(value){
+            showForm(repository);
+          }
+    });
   }
 
   @override
@@ -174,7 +190,7 @@ class IncomePageState extends State<IncomePage> {
                                 Chip(
                                   label: Text(repository.hideValues
                                       ? "-"
-                                      : "R\$ " + ic.value?.toStringAsFixed(2)),
+                                      : "R\$ ${ic.value?.toStringAsFixed(2)}"),
                                   backgroundColor: Colors.transparent,
                                 )
                               ],

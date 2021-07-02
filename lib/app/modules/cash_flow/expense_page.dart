@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:caixabios/app/model/expense_model.dart';
 import 'package:caixabios/app/modules/cash_flow/widgets/card_report.dart';
 import 'package:caixabios/app/modules/cash_flow/widgets/output_options.dart';
@@ -23,8 +25,14 @@ class ExpensePage extends StatefulWidget {
 
 class ExpensePageState extends State<ExpensePage> {
   ExpenseModel expense = ExpenseModel(createdAt: DateTime.now());
+  FocusNode firstNode = FocusNode();
 
   void showForm(CashFlowRepository repository) {
+
+    Timer(Duration(seconds: 1), (){
+      firstNode.nextFocus();
+    });
+
     showDialog(
         context: context,
         builder: (ctx) {
@@ -42,6 +50,7 @@ class ExpensePageState extends State<ExpensePage> {
                       children: [
                         FotonicaTextField(
                           label: "Descrição",
+                          focusNode: firstNode,
                           maxLines: 4,
                           controller:
                               TextEditingController(text: expense.description),
@@ -76,10 +85,12 @@ class ExpensePageState extends State<ExpensePage> {
                             ),
                             TextButton(
                                 onPressed: () {
+                                  expense.createdAt = DateTime.now();
                                   setState(() {
                                     repository.addExpense(expense);
                                   });
-                                  Navigator.pop(context);
+                                  expense = ExpenseModel(createdAt: DateTime.now());
+                                  Navigator.pop(context, true);
                                 },
                                 child: Text("Salvar"))
                           ],
@@ -91,7 +102,11 @@ class ExpensePageState extends State<ExpensePage> {
               )
             ],
           );
-        });
+        }).then((value) {
+          if(value){
+            showForm(repository);
+          }
+    });
   }
 
   @override
@@ -120,7 +135,7 @@ class ExpensePageState extends State<ExpensePage> {
                         primary: false,
                         children: repository.fiteredExpenses.map((ic) {
                           return ListTile(
-                            title: Text(ic.description),
+                            title: Text(ic.description ?? "Descrição"),
                             subtitle: Wrap(
                               spacing: 8,
                               children: [
@@ -172,7 +187,7 @@ class ExpensePageState extends State<ExpensePage> {
                                 Chip(
                                   label: Text(repository.hideValues
                                       ? "-"
-                                      : "R\$ " + ic.value?.toStringAsFixed(2)),
+                                      : "R\$ ${ic.value?.toStringAsFixed(2)}"),
                                   backgroundColor: Colors.transparent,
                                 )
                               ],
