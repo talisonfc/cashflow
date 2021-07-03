@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:caixabios/app/model/income_model.dart';
 import 'package:caixabios/app/model/payment_type.dart';
@@ -31,8 +32,7 @@ class IncomePageState extends State<IncomePage> {
   FocusNode focusClient = FocusNode();
 
   void showForm(CashFlowRepository repository) {
-
-    Timer(Duration(seconds: 1), (){
+    Timer(Duration(seconds: 1), () {
       focusClient.nextFocus();
     });
 
@@ -52,14 +52,13 @@ class IncomePageState extends State<IncomePage> {
                       shrinkWrap: true,
                       children: [
                         FotonicaTextField(
-                          focusNode: focusClient,
-                          label: "Cliente",
-                          controller: TextEditingController(
-                              text: incomeModel.clientName),
-                          onChange: (v) {
-                            incomeModel.clientName = v;
-                          }
-                        ),
+                            focusNode: focusClient,
+                            label: "Cliente",
+                            controller: TextEditingController(
+                                text: incomeModel.clientName),
+                            onChange: (v) {
+                              incomeModel.clientName = v;
+                            }),
                         FotonicaTextField(
                           label: "Valor",
                           type: TextInputType.numberWithOptions(decimal: true),
@@ -91,7 +90,8 @@ class IncomePageState extends State<IncomePage> {
                                   setState(() {
                                     repository.cashFlowModel
                                         .addIncome(incomeModel);
-                                    incomeModel = new IncomeModel(createdAt: DateTime.now());
+                                    incomeModel = new IncomeModel(
+                                        createdAt: DateTime.now());
                                   });
                                   repository.save();
                                   Navigator.pop(context, true);
@@ -106,16 +106,19 @@ class IncomePageState extends State<IncomePage> {
               )
             ],
           );
-        }).then((value){
-          if(value){
-            showForm(repository);
-          }
+        }).then((value) {
+      if (value) {
+        showForm(repository);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    TextStyle hintStyle = Theme.of(context).textTheme.bodyText1.copyWith(color: Theme.of(context).hintColor);
+    TextStyle hintStyle = Theme.of(context)
+        .textTheme
+        .bodyText1
+        .copyWith(color: Theme.of(context).hintColor);
 
     return Consumer<CashFlowRepository>(
       builder: (ctx, repository, child) => Padding(
@@ -124,13 +127,77 @@ class IncomePageState extends State<IncomePage> {
           // shrinkWrap: true,
           children: [
             if (!widget.hideAddBtn)
-              TextButton.icon(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    incomeModel = IncomeModel(createdAt: DateTime.now());
-                    showForm(repository);
-                  },
-                  label: Text("Nova entrada")),
+              Wrap(
+                children: [
+                  TextButton.icon(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        incomeModel = IncomeModel(createdAt: DateTime.now());
+                        showForm(repository);
+                      },
+                      label: Text("Nova entrada")),
+                  TextButton.icon(
+                    icon: Icon(Icons.list_alt),
+                    label: Text("Entrada em lote"),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            TextEditingController tec = TextEditingController();
+                            return SimpleDialog(
+                              title: Text("Caixa diário"),
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 24),
+                                  child: FotonicaTextField(
+                                    controller: tec,
+                                    placeholder: "Cole aqui...",
+                                    maxLines: 5,
+                                  ),
+                                ),
+                                Wrap(
+                                  alignment: WrapAlignment.center,
+                                  children: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Cancelar")),
+                                    TextButton(
+                                        onPressed: () {
+                                          LineSplitter ls = new LineSplitter();
+                                          List<String> lines =
+                                              ls.convert(tec.text);
+                                          for (int i = 0;
+                                              i < lines.length;
+                                              i += 12) {
+                                            String name = lines[i + 1];
+                                            double value = double.parse(
+                                                lines[i + 10]
+                                                    .replaceAll(',', '.'));
+                                            IncomeModel ict = IncomeModel(
+                                                createdAt: DateTime.now(),
+                                                clientName: name,
+                                                value: value,
+                                                paymentType: PaymentType.cash);
+                                            repository.cashFlowModel
+                                                .addIncome(ict);
+                                          }
+                                          repository.save();
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Salvar"))
+                                  ],
+                                )
+                              ],
+                            );
+                          }).then((value) {
+                        setState(() {});
+                      });
+                    },
+                  )
+                ],
+              ),
             Expanded(
               child: Card(
                 child: repository.fiteredIncomes.isNotEmpty
@@ -146,7 +213,8 @@ class IncomePageState extends State<IncomePage> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text(ic.createdAt.toIso8601String()),
+                                  child: Text(ic.createdAt?.toIso8601String() ??
+                                      "Data"),
                                 ),
                                 if (!widget.hideRemoveBtn)
                                   InkWell(
@@ -184,7 +252,8 @@ class IncomePageState extends State<IncomePage> {
                               spacing: 8,
                               children: [
                                 Chip(
-                                  label: Text(ic.paymentType.name() ?? "Tipo de pagamento"),
+                                  label: Text(ic.paymentType.name() ??
+                                      "Tipo de pagamento"),
                                   backgroundColor: Colors.transparent,
                                 ),
                                 Chip(
@@ -210,14 +279,17 @@ class IncomePageState extends State<IncomePage> {
                   value: repository.cashFlowModel.valueLastDay,
                   text:
                       "R\$ ${repository.cashFlowModel.valueLastDay.toStringAsFixed(2)}",
-                  onChanged: widget.hideAddBtn ? null : (v){
-                    if(v != null){
-                      setState(() {
-                        repository.cashFlowModel.valueLastDay = double.parse(v);
-                        repository.save();
-                      });
-                    }
-                  },
+                  onChanged: widget.hideAddBtn
+                      ? null
+                      : (v) {
+                          if (v != null) {
+                            setState(() {
+                              repository.cashFlowModel.valueLastDay =
+                                  double.parse(v);
+                              repository.save();
+                            });
+                          }
+                        },
                 ),
                 CardReport(
                   title: "Receita do dia",
@@ -225,57 +297,49 @@ class IncomePageState extends State<IncomePage> {
                   text:
                       "R\$ ${repository.cashFlowModel.totalIncome.toStringAsFixed(2)}\n",
                   adicionalInfos: [
+                    TextSpan(text: "Receita espécie\n", style: hintStyle),
                     TextSpan(
-                      text: "Receita espécie\n",
-                      style: hintStyle
-                    ),
+                        text:
+                            "R\$ ${repository.cashFlowModel.totalCash.toStringAsFixed(2)}\n"),
+                    TextSpan(text: "Receita débito/pix\n", style: hintStyle),
                     TextSpan(
-                        text: "R\$ ${repository.cashFlowModel.totalCash.toStringAsFixed(2)}\n"
-                    ),
+                        text:
+                            "R\$ ${repository.cashFlowModel.totalDebitPix.toStringAsFixed(2)}\n"),
+                    TextSpan(text: "Receita credito\n", style: hintStyle),
                     TextSpan(
-                        text: "Receita débito/pix\n",
-                        style: hintStyle
-                    ),
-                    TextSpan(
-                        text: "R\$ ${repository.cashFlowModel.totalDebitPix.toStringAsFixed(2)}\n"
-                    ),
-                    TextSpan(
-                        text: "Receita credito\n",
-                        style: hintStyle
-                    ),
-                    TextSpan(
-                        text: "R\$ ${repository.cashFlowModel.totalCredit.toStringAsFixed(2)}\n"
-                    )
+                        text:
+                            "R\$ ${repository.cashFlowModel.totalCredit.toStringAsFixed(2)}\n")
                   ],
                 ),
                 CardReport(
-                  title: "Despesas do dia",
-                  textValueColor: Theme.of(context).hintColor,
-                  text:
-                      "R\$ ${repository.cashFlowModel.expenseFromLocal.toStringAsFixed(2)}"
-                ),
+                    title: "Despesas do dia",
+                    textValueColor: Theme.of(context).hintColor,
+                    text:
+                        "R\$ ${repository.cashFlowModel.expenseFromLocal.toStringAsFixed(2)}"),
                 if (repository.cashFlowModel.valueToNextDay != null)
                   CardReport(
                     title: "Saldo para o próximo dia",
                     textValueColor: Colors.green,
                     value: repository.cashFlowModel.valueToNextDay,
-                    onChanged: widget.hideAddBtn ? null :  (v){
-                      if(v != null){
-                        setState(() {
-                          repository.cashFlowModel.valueToNextDay = double.parse(v);
-                        });
-                        repository.save();
-                      }
-                    },
+                    onChanged: widget.hideAddBtn
+                        ? null
+                        : (v) {
+                            if (v != null) {
+                              setState(() {
+                                repository.cashFlowModel.valueToNextDay =
+                                    double.parse(v);
+                              });
+                              repository.save();
+                            }
+                          },
                     text:
                         "R\$ ${repository.cashFlowModel.valueToNextDay.toStringAsFixed(2)}",
                   ),
                 CardReport(
-                  title: "Saldo em espécie",
-                  textValueColor: Theme.of(context).accentColor,
-                  text:
-                      "R\$ ${repository.cashFlowModel.saldoLocal.toStringAsFixed(2)}"
-                ),
+                    title: "Saldo em espécie",
+                    textValueColor: Theme.of(context).accentColor,
+                    text:
+                        "R\$ ${repository.cashFlowModel.saldoLocal.toStringAsFixed(2)}"),
               ],
             )
           ],
