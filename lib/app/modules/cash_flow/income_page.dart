@@ -316,25 +316,24 @@ class IncomePageState extends State<IncomePage> {
                     textValueColor: Theme.of(context).hintColor,
                     text:
                         "R\$ ${repository.cashFlowModel.expenseFromLocal.toStringAsFixed(2)}"),
-                if (repository.cashFlowModel.valueToNextDay != null)
-                  CardReport(
-                    title: "Saldo para o próximo dia",
-                    textValueColor: Colors.green,
-                    value: repository.cashFlowModel.valueToNextDay,
-                    onChanged: widget.hideAddBtn
-                        ? null
-                        : (v) {
-                            if (v != null) {
-                              setState(() {
-                                repository.cashFlowModel.valueToNextDay =
-                                    double.parse(v);
-                              });
-                              repository.save();
-                            }
-                          },
-                    text:
-                        "R\$ ${repository.cashFlowModel.valueToNextDay.toStringAsFixed(2)}",
-                  ),
+                CardReport(
+                  title: "Saldo para o próximo dia",
+                  textValueColor: Colors.green,
+                  value: repository.cashFlowModel.valueToNextDay,
+                  onChanged: widget.hideAddBtn
+                      ? null
+                      : (v) {
+                          if (v != null) {
+                            setState(() {
+                              repository.cashFlowModel.valueToNextDay =
+                                  double.parse(v);
+                            });
+                            repository.save();
+                          }
+                        },
+                  text:
+                      "R\$ ${repository.cashFlowModel.valueToNextDay?.toStringAsFixed(2) ?? "0.00"}",
+                ),
                 CardReport(
                     title: "Saldo em espécie",
                     textValueColor: Theme.of(context).accentColor,
