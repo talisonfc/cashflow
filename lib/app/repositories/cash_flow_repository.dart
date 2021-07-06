@@ -35,6 +35,13 @@ class CashFlowRepository extends ChangeNotifier {
           JsonDecoder().convert(database.get("business")));
     }
 
+    // Configurar o valor inicial do dia como o valor do proximo dia do dia anterior
+    double valueLastDay;
+    if (businessModel.businessCashFlow.length > 0) {
+      CashFlowModel cashFlowModelLastDay = businessModel.businessCashFlow[businessModel.businessCashFlow.length - 1];
+      valueLastDay = cashFlowModelLastDay.valueToNextDay;
+    }
+
     // get today cashflow, if not exist add to businessCashFlow
     DateTime today = DateTime.now();
     Iterable<CashFlowModel> tmp = businessModel.businessCashFlow.where((bcf) =>
@@ -47,12 +54,7 @@ class CashFlowRepository extends ChangeNotifier {
       cashFlowModel = tmp.first;
     } else {
       print("[INFO] load business data generated");
-      // Configurar o valor inicial do dia como o valor do proximo dia do dia anterior
-      double valueLastDay;
-      if (tmp.length > 0) {
-        CashFlowModel cashFlowModelLastDay = tmp.toList()[tmp.length - 1];
-        valueLastDay = cashFlowModelLastDay.valueToNextDay;
-      }
+
       CashFlowModel model = CashFlowModel(
           createdAt: DateTime.now(),
           expenses: [],
