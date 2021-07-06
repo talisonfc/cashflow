@@ -30,6 +30,59 @@ class CashFlowPageState extends State<CashFlowPage> {
     Provider.of<CashFlowRepository>(context, listen: false).setTodayCashFlow();
   }
 
+  void closeCaixa(CashFlowRepository repository){
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return SimpleDialog(
+            title: Text(
+                "Quer deixar algum valor para o próximo dia?"),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24),
+                child: FotonicaTextField(
+                  label: "Valor",
+                  controller: TextEditingController(
+                      text: repository
+                          .cashFlowModel.valueToNextDay
+                          ?.toString()),
+                  inputFormatters: [InputFormatters.number()],
+                  onChange: (v) {
+                    if (v != null) {
+                      repository.cashFlowModel
+                          .valueToNextDay = double.parse(v);
+                    }
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24),
+                child: Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Cancelar")),
+                    TextButton(
+                        onPressed: () {
+                          repository.save();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: Text("Salvar"))
+                  ],
+                ),
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -49,7 +102,8 @@ class CashFlowPageState extends State<CashFlowPage> {
                       IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () {
-                            DateTime initialDate = repository.cashFlowModel.createdAt;
+                            DateTime initialDate =
+                                repository.cashFlowModel.createdAt;
                             DateTime firstDate =
                                 DateTime.now().subtract(Duration(days: 7));
                             DateTime lastDate =
@@ -196,56 +250,10 @@ class CashFlowPageState extends State<CashFlowPage> {
               if (!widget.filter)
                 TextButton(
                   onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (ctx) {
-                          return SimpleDialog(
-                            title: Text(
-                                "Quer deixar algum valor para o próximo dia?"),
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 24),
-                                child: FotonicaTextField(
-                                  label: "Valor",
-                                  controller: TextEditingController(
-                                      text: repository
-                                          .cashFlowModel.valueToNextDay
-                                          ?.toString()),
-                                  inputFormatters: [InputFormatters.number()],
-                                  onChange: (v) {
-                                    if (v != null) {
-                                      repository.cashFlowModel.valueToNextDay =
-                                          double.parse(v);
-                                    }
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 24),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Cancelar")),
-                                    TextButton(
-                                        onPressed: () {
-                                          repository.save();
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Salvar"))
-                                  ],
-                                ),
-                              )
-                            ],
-                          );
-                        });
+                    if (repository.cashFlowModel.valueToNextDay == null)
+                      closeCaixa(repository);
+                    else
+                      Navigator.pop(context);
                   },
                   child: Text(
                     "Fechar caixa",

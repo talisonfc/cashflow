@@ -28,8 +28,13 @@ class IncomePage extends StatefulWidget {
 
 class IncomePageState extends State<IncomePage> {
   IncomeModel incomeModel = IncomeModel();
-
   FocusNode focusClient = FocusNode();
+
+  Map<String, String> mapPaymentTypeToCode = {
+    "Dinheiro": "cash",
+    "Crédito": "credit_card",
+    "DEBITO": "debit_card"
+  };
 
   void showForm(CashFlowRepository repository) {
     Timer(Duration(seconds: 1), () {
@@ -113,6 +118,92 @@ class IncomePageState extends State<IncomePage> {
     });
   }
 
+  void showEntradaLote(CashFlowRepository repository) {
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          TextEditingController tec = TextEditingController();
+          return SimpleDialog(
+            title: Text("Caixa diário"),
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: FotonicaTextField(
+                  controller: tec,
+                  placeholder: "Cole aqui...",
+                  maxLines: 5,
+                ),
+              ),
+              Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text("Cancelar")),
+                  TextButton(
+                      onPressed: () {
+                        LineSplitter ls = new LineSplitter();
+                        List<String> lines = ls.convert(tec.text);
+
+                        for (int i = 0; i < lines.length; i += 1) {
+                          List<String> r = lines[i].split(" ");
+                          if (r.length > 2) {
+                            // print(r);
+                            r.removeAt(0);
+                            String data = r[0];
+                            String time = r[1];
+                            r.removeRange(0, 2);
+
+                            String pt = "";
+                            // Extrair forma de pagamento
+                            if (i > 2 && lines[i - 1].split(" ").length == 1) {
+                              pt = lines[i - 1];
+                            } else {
+                              pt = r[r.length - 2];
+                              r.removeAt(r.length - 2);
+                            }
+
+                            double value = double.parse(
+                                r[r.length - 1].replaceAll(",", "."));
+                            r.removeAt(r.length - 1);
+                            String clientName = r.join(" ");
+
+                            // Extrair data e hora
+                            List<int> d1 = data
+                                .split("/")
+                                .map((it) => int.parse(it))
+                                .toList();
+                            List<int> d2 = time
+                                .split(".")
+                                .map((it) => int.parse(it))
+                                .toList();
+                            DateTime createdAt = DateTime(
+                                d1[2], d1[1], d1[0], d2[0], d2[1], d2[2]);
+
+                            IncomeModel ict = IncomeModel(
+                                createdAt: createdAt,
+                                clientName: clientName,
+                                value: value,
+                                paymentType: PaymentTypeBuilder.build(
+                                    mapPaymentTypeToCode[pt]));
+                            repository.cashFlowModel.addIncome(ict);
+                          }
+                        }
+                        repository.save();
+                        Navigator.pop(context);
+                      },
+                      child: Text("Salvar"))
+                ],
+              )
+            ],
+          );
+        }).then((value) {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     TextStyle hintStyle = Theme.of(context)
@@ -140,62 +231,27 @@ class IncomePageState extends State<IncomePage> {
                     icon: Icon(Icons.list_alt),
                     label: Text("Entrada em lote"),
                     onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (ctx) {
-                            TextEditingController tec = TextEditingController();
-                            return SimpleDialog(
-                              title: Text("Caixa diário"),
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 24),
-                                  child: FotonicaTextField(
-                                    controller: tec,
-                                    placeholder: "Cole aqui...",
-                                    maxLines: 5,
-                                  ),
-                                ),
-                                Wrap(
-                                  alignment: WrapAlignment.center,
-                                  children: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Cancelar")),
-                                    TextButton(
-                                        onPressed: () {
-                                          LineSplitter ls = new LineSplitter();
-                                          List<String> lines =
-                                              ls.convert(tec.text);
-                                          for (int i = 0;
-                                              i < lines.length;
-                                              i += 12) {
-                                            String name = lines[i + 1];
-                                            double value = double.parse(
-                                                lines[i + 10]
-                                                    .replaceAll(',', '.'));
-                                            IncomeModel ict = IncomeModel(
-                                                createdAt: DateTime.now(),
-                                                clientName: name,
-                                                value: value,
-                                                paymentType: PaymentType.cash);
-                                            repository.cashFlowModel
-                                                .addIncome(ict);
-                                          }
-                                          repository.save();
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Salvar"))
-                                  ],
-                                )
-                              ],
-                            );
-                          }).then((value) {
-                        setState(() {});
-                      });
+                      showEntradaLote(repository);
                     },
-                  )
+                  ),
+                  TextButton.icon(
+                      onPressed: () {
+                        showDialog(context: context, builder: (ctx){
+                          return SimpleDialog(
+                            title: Text("Tem certeza que deseja remover todas as entradas?"),
+                            children: [
+                              SimpleDialogActions(value: true,)
+                            ],
+                          );
+                        }).then((v){
+                          if(v != null && v){
+                            repository.cashFlowModel.incomes.clear();
+                            repository.save();
+                          }
+                        });
+                      },
+                      icon: Icon(Icons.cleaning_services_sharp),
+                      label: Text("Limpar entradas"))
                 ],
               ),
             Expanded(

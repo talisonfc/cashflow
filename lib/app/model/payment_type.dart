@@ -32,7 +32,7 @@ class PaymentTypeBuilder {
       case "credit_card": return PaymentType.credit_card;
       case "debit_card": return PaymentType.debit_card;
       case "pix": return PaymentType.pix;
-      default: return null;
+      default: return PaymentType.cash;
     }
   }
 }

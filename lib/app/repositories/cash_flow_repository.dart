@@ -70,6 +70,7 @@ class CashFlowRepository extends ChangeNotifier {
   void save() async {
     database.put("business", JsonEncoder().convert(businessModel.toJson()));
     // database.put("cashFlow", JsonEncoder().convert(cashFlowModel.toJson()));
+    notifyListeners();
   }
 
   void remove(IncomeModel income) {
