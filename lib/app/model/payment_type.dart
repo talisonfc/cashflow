@@ -26,7 +26,7 @@ extension PaymentTypeExtension on PaymentType {
 }
 
 class PaymentTypeBuilder {
-  static PaymentType build(String v){
+  static PaymentType build(String? v){
     switch(v){
       case "cash": return PaymentType.cash;
       case "credit_card": return PaymentType.credit_card;

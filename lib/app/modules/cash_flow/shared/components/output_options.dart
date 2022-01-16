@@ -1,14 +1,12 @@
-
-
 import 'package:caixabios/app/model/expense_model.dart';
 import 'package:flutter/material.dart';
 
-class OutputOptions extends StatefulWidget{
-
+class OutputOptions extends StatefulWidget {
   final OutputOption initialData;
-  final Function(OutputOption) onChanged;
+  final Function(OutputOption?) onChanged;
 
-  OutputOptions({this.initialData, this.onChanged});
+  OutputOptions(
+      {this.initialData = OutputOption.local, required this.onChanged});
 
   @override
   State<StatefulWidget> createState() {
@@ -16,9 +14,8 @@ class OutputOptions extends StatefulWidget{
   }
 }
 
-class OutputOptionsState extends State<OutputOptions>{
-
-  OutputOption outputOption;
+class OutputOptionsState extends State<OutputOptions> {
+  OutputOption? outputOption;
 
   @override
   void initState() {
@@ -31,12 +28,12 @@ class OutputOptionsState extends State<OutputOptions>{
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      children: OutputOption.values.map((oo){
-        return RadioListTile(
+      children: OutputOption.values.map((oo) {
+        return RadioListTile<OutputOption>(
           title: Text(oo.name()),
           value: oo,
           groupValue: outputOption,
-          onChanged: (el){
+          onChanged: (el) {
             setState(() {
               outputOption = el;
             });

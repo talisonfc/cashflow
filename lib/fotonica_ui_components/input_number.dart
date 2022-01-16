@@ -9,7 +9,7 @@ class InputNumber extends StatelessWidget {
   InputNumber(
       {this.value = 1,
       this.min = 0,
-      @required this.onChange,
+      required this.onChange,
       this.btnRadius = 16});
 
   @override
@@ -39,11 +39,11 @@ class InputNumber extends StatelessWidget {
                 this.value.toString(),
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
+                    .bodyText1!
                     .copyWith(fontSize: 20),
               ),
               minWidth: 0,
-              padding: EdgeInsets.all(btnRadius),
+              padding: EdgeInsets.all(btnRadius), onPressed: () {  },
             ),
             MaterialButton(
               onPressed: () {

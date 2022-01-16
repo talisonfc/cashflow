@@ -1,24 +1,22 @@
 import 'package:caixabios/app/modules/cash_flow/cash_flow_page.dart';
 import 'package:caixabios/app/modules/reports/reports_page.dart';
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
+import 'package:caixabios/cash_flow_routes.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_elevated_button.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
 import 'package:caixabios/fotonica_ui_components/input_formatters.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/route_manager.dart';
 
-class AppPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return AppPageState();
-  }
-}
-
-class AppPageState extends State<AppPage> {
-  void openDailyCashFlow(CashFlowRepository repository) {
-    if (repository.cashFlowModel.valueLastDay != null)
-      Navigator.push(
-          context, MaterialPageRoute(builder: (ctx) => CashFlowPage()));
+class HomePage extends GetView<CashFlowRepository> {
+  void openDailyCashFlow(BuildContext context, CashFlowRepository repository) {
+    if (repository.cashFlowModel.valueLastDay != null) {
+      final today = DateTime.now();
+      CashFlowRoutes.toCashFlow(today);
+    }
+    // Navigator.push(
+    //     context, MaterialPageRoute(builder: (ctx) => CashFlowPage()));
     else
       showDialog(
           context: context,
@@ -33,13 +31,12 @@ class AppPageState extends State<AppPage> {
                     type: TextInputType.number,
                     inputFormatters: [InputFormatters.number()],
                     controller: TextEditingController(
-                        text:
-                            repository.cashFlowModel.valueLastDay?.toString()),
+                        text: repository.cashFlowModel.valueLastDay.toString()),
                     onChange: (v) {
-                      if (v != null) {
-                        repository.cashFlowModel.valueLastDay = double.parse(v);
-                      }
+                      repository.cashFlowModel.valueLastDay = double.parse(v);
                     },
+                    focusNode: FocusNode(),
+                    label: 'Label',
                   ),
                 ),
                 Padding(
@@ -75,10 +72,11 @@ class AppPageState extends State<AppPage> {
   @override
   Widget build(BuildContext context) {
     TextStyle bodyText1 =
-        Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 20);
+        Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 20);
 
-    return Consumer<CashFlowRepository>(
-      builder: (ctx, repository, child) => Scaffold(
+    // return Scaffold(body: Text('teste'),);
+
+    return Scaffold(
           body: Center(
         child: Wrap(
           direction: Axis.horizontal,
@@ -86,7 +84,7 @@ class AppPageState extends State<AppPage> {
           children: [
             Center(
               child: Container(
-                padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   width: 500,
                   child: Image.asset("assets/images/biosdiagnostico.png")),
             ),
@@ -95,7 +93,7 @@ class AppPageState extends State<AppPage> {
                 Card(
                   child: TextButton.icon(
                     onPressed: () {
-                      openDailyCashFlow(repository);
+                      openDailyCashFlow(context, controller);
                     },
                     label: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -130,8 +128,12 @@ class AppPageState extends State<AppPage> {
                 Card(
                   child: TextButton.icon(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (ctx) => ReportsPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => ReportsPage(
+                                    repository: controller,
+                                  )));
                     },
                     label: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -148,7 +150,7 @@ class AppPageState extends State<AppPage> {
             )
           ],
         ),
-      )),
-    );
+      ));
+    
   }
 }

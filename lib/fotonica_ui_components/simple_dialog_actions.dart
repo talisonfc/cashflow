@@ -1,17 +1,12 @@
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SimpleDialogActions<T> extends StatelessWidget {
-
   final T value;
 
-  SimpleDialogActions({this.value});
+  SimpleDialogActions({required this.value});
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [

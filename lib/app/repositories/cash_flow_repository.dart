@@ -1,21 +1,20 @@
-import 'dart:convert';
-
 import 'package:caixabios/app/model/business_model.dart';
 import 'package:caixabios/app/model/cash_flow_model.dart';
 import 'package:caixabios/app/model/expense_model.dart';
 import 'package:caixabios/app/model/income_model.dart';
 import 'package:caixabios/app/types/report_type.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
-class CashFlowRepository extends ChangeNotifier {
-  Box database;
+class CashFlowRepository extends GetxController {
+  late DatabaseReference databaseReference;
+
+  // Box database;
   CashFlowModel cashFlowModel =
       CashFlowModel(incomes: [], expenses: [], createdAt: DateTime.now());
 
-  CashFlowModel todayCashFlow;
-
-  BusinessModel businessModel = BusinessModel(businessCashFlow: []);
+  late CashFlowModel todayCashFlow;
+  BusinessModel businessModel = BusinessModel();
   bool hideValues = false;
   ReportType reportType = ReportType.daily;
 
@@ -27,18 +26,22 @@ class CashFlowRepository extends ChangeNotifier {
   DateTime dateTimeFilter = DateTime.now();
 
   void init() async {
-    await Hive.initFlutter();
-    database = await Hive.openBox('database');
+    // await Hive.initFlutter();
+    // database = await Hive.openBox('database');
 
-    if (database.get("business") != null) {
-      businessModel = BusinessModel.fromJson(
-          JsonDecoder().convert(database.get("business")));
+    databaseReference = FirebaseDatabase.instance.ref('business');
+    
+    final snapshot = await databaseReference.get();
+
+    if (snapshot.value != null) {
+      businessModel = BusinessModel.fromJson(snapshot.value as Map<String, dynamic>);
     }
 
     // Configurar o valor inicial do dia como o valor do proximo dia do dia anterior
-    double valueLastDay;
+    double valueLastDay = 0;
     if (businessModel.businessCashFlow.length > 0) {
-      CashFlowModel cashFlowModelLastDay = businessModel.businessCashFlow[businessModel.businessCashFlow.length - 1];
+      CashFlowModel cashFlowModelLastDay = businessModel
+          .businessCashFlow[businessModel.businessCashFlow.length - 1];
       valueLastDay = cashFlowModelLastDay.valueToNextDay;
     }
 
@@ -60,19 +63,18 @@ class CashFlowRepository extends ChangeNotifier {
           expenses: [],
           incomes: [],
           valueLastDay: valueLastDay);
-      businessModel.addCashFlow(model);
+      // businessModel.addCashFlow(model);
       cashFlowModel = model;
     }
 
     // cashFlowModel =
     //     CashFlowModel.fromJson(JsonDecoder().convert(database.get("cashFlow")));
-    notifyListeners();
   }
 
   void save() async {
-    database.put("business", JsonEncoder().convert(businessModel.toJson()));
+    databaseReference.set(businessModel);
+    // database.put("business", JsonEncoder().convert(businessModel.toJson()));
     // database.put("cashFlow", JsonEncoder().convert(cashFlowModel.toJson()));
-    notifyListeners();
   }
 
   void remove(IncomeModel income) {
@@ -103,21 +105,22 @@ class CashFlowRepository extends ChangeNotifier {
 
   void changeHideValues() {
     this.hideValues = !this.hideValues;
-    notifyListeners();
   }
 
-  void changeReportType(ReportType reportType) {
-    this.reportType = reportType;
-    notifyListeners();
+  void changeReportType(ReportType? reportType) {
+    if (reportType != null) {
+      this.reportType = reportType;
+    }
   }
 
-  void setCashFlow(CashFlowModel cf) {
-    cashFlowModel = cf;
-    notifyListeners();
+  void setCashFlow(CashFlowModel? cf) {
+    if (cf != null) {
+      cashFlowModel = cf;
+    }
   }
 
-  void setTodayCashFlow(){
+  void setTodayCashFlow() {
     cashFlowModel = this.businessModel.businessCashFlow.last;
-    // notifyListeners();
+    //
   }
 }

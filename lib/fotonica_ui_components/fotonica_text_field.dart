@@ -1,44 +1,42 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FotonicaTextField extends StatefulWidget {
   final String label;
-  final String placeholder;
-  final TextEditingController controller;
-  final Function onChange;
-  final TextInputType type;
-  final TextStyle textStyle;
-  final TextStyle textStyleLabel;
-  final InputBorder border;
+  final String? placeholder;
+  final TextEditingController? controller;
+  final Function(String)? onChange;
+  final TextInputType? type;
+  final TextStyle? textStyle;
+  final TextStyle? textStyleLabel;
+  final InputBorder? border;
   final bool obscureText;
-  final int minLines;
-  final int maxLines;
-  final Function onTap;
+  final int? minLines;
+  final int? maxLines;
+  final Function()? onTap;
   final bool readOnly;
-  final Widget suffixIcon;
-  final EdgeInsetsGeometry edgeInsetsGeometry;
-  final bool filled;
-  final Widget prefixIcon;
-  final Widget suffix;
-  final Function validator;
+  final Widget? suffixIcon;
+  final EdgeInsetsGeometry? edgeInsetsGeometry;
+  final bool? filled;
+  final Widget? prefixIcon;
+  final Widget? suffix;
+  final String? Function(String?)? validator;
   final TextCapitalization textCapitalization;
-  final bool autovalidade;
+  final bool? autovalidade;
   final double radius;
-  final List<TextInputFormatter> inputFormatters;
-  final String hint;
-  FocusNode focusNode;
-  final Function(BuildContext,
-      {int currentLength, bool isFocused, int maxLength}) buildCounter;
-  final int maxLength;
-  final String tooltipText;
-  final TextInputAction textInputAction;
-  final EdgeInsets contentPadding;
-  final Function(String) onSubmitted;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? hint;
+  FocusNode? focusNode;
+  final Widget? Function(BuildContext,
+      {int currentLength, bool isFocused, int? maxLength})? buildCounter;
+  final int? maxLength;
+  final String? tooltipText;
+  final TextInputAction? textInputAction;
+  final EdgeInsets? contentPadding;
+  final Function(String)? onSubmitted;
 
   FotonicaTextField(
-      {Key key,
-      this.label,
+      {this.label = '',
       this.placeholder,
       this.onSubmitted,
       this.controller,
@@ -59,7 +57,7 @@ class FotonicaTextField extends StatefulWidget {
       this.suffix,
       this.validator,
       this.radius = 5.0,
-      this.textCapitalization,
+      this.textCapitalization = TextCapitalization.sentences,
       this.edgeInsetsGeometry = EdgeInsets.zero,
       this.inputFormatters,
       this.hint,
@@ -69,7 +67,7 @@ class FotonicaTextField extends StatefulWidget {
       this.textInputAction,
       this.tooltipText,
       this.contentPadding})
-      : super(key: key);
+      : super();
 
   @override
   State<StatefulWidget> createState() {
@@ -83,13 +81,12 @@ class _FotonicaTextField extends State<FotonicaTextField> {
   @override
   void initState() {
     super.initState();
-    if (widget.focusNode == null) widget.focusNode = FocusNode();
-
-    widget.focusNode.addListener(() {
-      setState(() {
-        _textFieldFocus = !_textFieldFocus;
+    if (widget.focusNode != null)
+      widget.focusNode!.addListener(() {
+        setState(() {
+          _textFieldFocus = !_textFieldFocus;
+        });
       });
-    });
   }
 
   Widget buildLabel(BuildContext context) => widget.tooltipText != null
@@ -104,7 +101,7 @@ class _FotonicaTextField extends State<FotonicaTextField> {
               children: [
                 Text(
                   widget.label,
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
                         color: Colors.grey,
                         fontWeight: FontWeight.w600,
                       ),
@@ -123,7 +120,7 @@ class _FotonicaTextField extends State<FotonicaTextField> {
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(
             widget.label,
-            style: Theme.of(context).textTheme.bodyText1.copyWith(
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   color: Colors.grey,
                   fontWeight: FontWeight.w600,
                 ),
@@ -134,30 +131,26 @@ class _FotonicaTextField extends State<FotonicaTextField> {
   Widget build(BuildContext context) {
     List<Widget> content = [];
 
-    if (widget.label != null) {
-      content.add(buildLabel(context));
-    }
+    content.add(buildLabel(context));
 
     content.add(
       Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.radius),
           border: !_textFieldFocus
-              ? Border.all(color: Colors.grey[200], width: 2)
-              : Border.all(color: Colors.grey[300], width: 2),
+              ? Border.all(color: Colors.grey[200]!, width: 2)
+              : Border.all(color: Colors.grey[300]!, width: 2),
         ),
         child: Row(children: [
           Expanded(
             child: TextFormField(
-              autovalidate:
-                  widget.autovalidade != null ? widget.autovalidade : false,
+              // autovalidate:
+              //     widget.autovalidade != null ? widget.autovalidade : false,
               readOnly: widget.readOnly,
               obscureText: widget.obscureText,
               controller: widget.controller,
               onChanged: widget.onChange,
-              textCapitalization: widget.textCapitalization != null
-                  ? widget.textCapitalization
-                  : TextCapitalization.sentences,
+              textCapitalization: widget.textCapitalization,
               keyboardType:
                   widget.type != null ? widget.type : TextInputType.text,
               textInputAction: widget.textInputAction,

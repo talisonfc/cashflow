@@ -4,25 +4,29 @@ import 'package:caixabios/app/model/month_report_model.dart';
 class BusinessModel {
   List<CashFlowModel> businessCashFlow;
 
-  BusinessModel({this.businessCashFlow});
+  BusinessModel({this.businessCashFlow = const <CashFlowModel>[]});
 
   void addCashFlow(CashFlowModel model) {
     businessCashFlow.add(model);
   }
 
-  BusinessModel.fromJson(Map<String, dynamic> json) {
-    businessCashFlow = json["businessCashFlow"] != null
-        ? json["businessCashFlow"].map<CashFlowModel>((el) {
-            return CashFlowModel.fromJson(el);
-          }).toList()
-        : [];
+  factory BusinessModel.fromJson(Map<String, dynamic> json) {
+    return BusinessModel(
+        businessCashFlow: json["businessCashFlow"] != null
+            ? json["businessCashFlow"].map<CashFlowModel>((el) {
+                return CashFlowModel.fromJson(el);
+              }).toList()
+            : []);
+  }
+
+  BusinessModel copyWith({List<CashFlowModel>? businessCashFlow}) {
+    return BusinessModel(
+        businessCashFlow: businessCashFlow ?? this.businessCashFlow);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "businessCashFlow": businessCashFlow != null
-          ? businessCashFlow.map((e) => e.toJson()).toList()
-          : []
+      "businessCashFlow": businessCashFlow.map((e) => e.toJson()).toList()
     };
   }
 

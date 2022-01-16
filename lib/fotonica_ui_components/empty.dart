@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 
 class Empty extends StatelessWidget {
   final String message;
-  final Widget child;
+  final Widget? child;
   final Widget icon;
 
-  Empty({Key key, this.message = "Any message defined", this.child, this.icon})
+  Empty(
+      {Key? key,
+      this.message = "Any message defined",
+      this.child,
+      this.icon = const Icon(
+        Icons.hourglass_empty,
+        size: 100,
+        color: Colors.grey,
+      )})
       : super(key: key);
 
   @override
@@ -14,13 +22,7 @@ class Empty extends StatelessWidget {
       child: ListView(
         shrinkWrap: true,
         children: [
-          icon != null
-              ? icon
-              : Icon(
-                  Icons.hourglass_empty,
-                  size: 100,
-                  color: Colors.grey,
-                ),
+          icon,
           Padding(
             padding: EdgeInsets.all(16),
             child: Text(
@@ -32,7 +34,7 @@ class Empty extends StatelessWidget {
                   color: Colors.grey),
             ),
           ),
-          if (child != null) child
+          if (child != null) child!
         ],
       ),
     );

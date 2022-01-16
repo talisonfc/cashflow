@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 class PaymentTypeOptions extends StatefulWidget {
 
   final PaymentType initialData;
-  final Function(PaymentType) onChanged;
+  final Function(PaymentType?) onChanged;
 
-  PaymentTypeOptions({this.initialData, this.onChanged});
+  PaymentTypeOptions({this.initialData = PaymentType.cash, required this.onChanged});
 
   @override
   State<StatefulWidget> createState() {
@@ -17,7 +17,7 @@ class PaymentTypeOptions extends StatefulWidget {
 
 class PaymentTypeOptionsPageState extends State<PaymentTypeOptions>{
 
-  PaymentType paymentType;
+  PaymentType? paymentType;
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class PaymentTypeOptionsPageState extends State<PaymentTypeOptions>{
   Widget build(BuildContext context) {
     return Wrap(
       children: PaymentType.values.map((pt) {
-        return RadioListTile(
+        return RadioListTile<PaymentType>(
             value: pt,
             title: Text(pt.name()),
             groupValue: paymentType,

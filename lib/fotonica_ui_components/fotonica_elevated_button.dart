@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 
 class FotonicaElevatedButton extends StatelessWidget {
   final String label;
-  final Function onPressed;
-  final Icon icon;
-  final Color color;
-  final Color labelColor;
+  final Function()? onPressed;
+  final Icon? icon;
+  final Color? color;
+  final Color? labelColor;
 
-  FotonicaElevatedButton({this.label, this.onPressed, this.icon, this.color, this.labelColor});
+  FotonicaElevatedButton(
+      {required this.label,
+      this.onPressed,
+      this.icon,
+      this.color,
+      this.labelColor});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +23,14 @@ class FotonicaElevatedButton extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       child: Wrap(
         children: [
-          if(icon != null)
-            icon,
+          if (icon != null) icon!,
           Text(
             label,
-            style: Theme.of(context).textTheme.bodyText1.copyWith(
-                fontSize: 18, fontWeight: FontWeight.bold, color: this.labelColor != null ? this.labelColor : Colors.white),
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color:
+                    this.labelColor != null ? this.labelColor : Colors.white),
           )
         ],
       ),
