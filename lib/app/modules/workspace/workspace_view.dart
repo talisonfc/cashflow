@@ -7,9 +7,9 @@ import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
 import 'package:caixabios/fotonica_ui_components/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/route_manager.dart';
 
-class HomePage extends GetView<CashFlowRepository> {
+class WorkspaceView extends GetView<CashFlowRepository> {
+
   void openDailyCashFlow(BuildContext context, CashFlowRepository repository) {
     if (repository.cashFlowModel.valueLastDay != null) {
       final today = DateTime.now();
@@ -73,84 +73,81 @@ class HomePage extends GetView<CashFlowRepository> {
   Widget build(BuildContext context) {
     TextStyle bodyText1 =
         Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 20);
-
-    // return Scaffold(body: Text('teste'),);
-
-    return Scaffold(
-          body: Center(
-        child: Wrap(
-          direction: Axis.horizontal,
-          alignment: WrapAlignment.center,
-          children: [
-            Center(
-              child: Container(
-                  padding: EdgeInsets.all(16),
-                  width: 500,
-                  child: Image.asset("assets/images/biosdiagnostico.png")),
-            ),
-            Wrap(
-              children: [
-                Card(
-                  child: TextButton.icon(
-                    onPressed: () {
-                      openDailyCashFlow(context, controller);
-                    },
-                    label: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Caixa do dia",
-                        style: bodyText1,
-                      ),
-                    ),
-                    icon: Icon(Icons.monetization_on),
-                  ),
-                ),
-                Card(
-                  child: TextButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (ctx) => CashFlowPage(
-                                    filter: true,
-                                  )));
-                    },
-                    label: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Consultar caixa",
-                        style: bodyText1,
-                      ),
-                    ),
-                    icon: Icon(Icons.search),
-                  ),
-                ),
-                Card(
-                  child: TextButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (ctx) => ReportsPage(
-                                    repository: controller,
-                                  )));
-                    },
-                    label: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Relatórios financeiros",
-                        style: bodyText1,
-                      ),
-                    ),
-                    icon: Icon(Icons.picture_as_pdf),
-                  ),
-                ),
-                // TextButton(onPressed: (){}, child: Text("Consultar caixa"))
-              ],
-            )
-          ],
-        ),
-      ));
     
+    return Scaffold(
+        body: Center(
+      child: Wrap(
+        direction: Axis.horizontal,
+        alignment: WrapAlignment.center,
+        children: [
+          Center(
+            child: Container(
+                padding: EdgeInsets.all(16),
+                width: 500,
+                child: Image.asset("assets/images/biosdiagnostico.png")),
+          ),
+          Wrap(
+            children: [
+              Card(
+                child: TextButton.icon(
+                  onPressed: () {
+                    openDailyCashFlow(context, controller);
+                  },
+                  label: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Caixa do dia",
+                      style: bodyText1,
+                    ),
+                  ),
+                  icon: Icon(Icons.monetization_on),
+                ),
+              ),
+              Card(
+                child: TextButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => CashFlowPage(
+                                  filter: true,
+                                )));
+                  },
+                  label: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Consultar caixa",
+                      style: bodyText1,
+                    ),
+                  ),
+                  icon: Icon(Icons.search),
+                ),
+              ),
+              Card(
+                child: TextButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => ReportsPage(
+                                  repository: controller,
+                                )));
+                  },
+                  label: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Relatórios financeiros",
+                      style: bodyText1,
+                    ),
+                  ),
+                  icon: Icon(Icons.picture_as_pdf),
+                ),
+              ),
+              // TextButton(onPressed: (){}, child: Text("Consultar caixa"))
+            ],
+          )
+        ],
+      ),
+    ));
   }
 }

@@ -6,6 +6,7 @@ class CashFlowRoutes {
 
   static String initial = '/app';
   static String home = '/home';
+  static String workspace = '/workspace';
   static String cashflow = '/cashflow/:$cashFlowId';
   static String income = '/income';
   static String addIncome = '/add';
@@ -20,7 +21,7 @@ class CashFlowRoutes {
   static String expensePath = '$cashflowPath$expense';
 
   static String _cashflowRoute(String _cashFlowId) {
-    return '$home${cashflow.replaceAll(':$cashFlowId', _cashFlowId)}';
+    return '$workspace${cashflow.replaceAll(':$cashFlowId', _cashFlowId)}';
   }
 
   static void back() {
@@ -29,6 +30,10 @@ class CashFlowRoutes {
 
   static toHome(){
     Get.rootDelegate.toNamed(home);
+  }
+
+  static toWorkspace(){
+    Get.rootDelegate.toNamed(workspace);
   }
 
   static toCashFlow(DateTime dateTime) {

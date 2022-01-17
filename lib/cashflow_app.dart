@@ -1,6 +1,6 @@
 import 'dart:js';
 
-import 'package:caixabios/app/home_page.dart';
+import 'package:caixabios/app/modules/home/home_page.dart';
 import 'package:caixabios/app/modules/cash_flow/cash_flow_bindings.dart';
 import 'package:caixabios/app/modules/cash_flow/cash_flow_page.dart';
 import 'package:caixabios/app/modules/cash_flow/expense/create/expense_create_bindings.dart';
@@ -12,6 +12,7 @@ import 'package:caixabios/app/modules/cash_flow/income/create/income_create_bind
 import 'package:caixabios/app/modules/cash_flow/income/create/income_create_page.dart';
 import 'package:caixabios/app/modules/cash_flow/income/income_bindings.dart';
 import 'package:caixabios/app/modules/cash_flow/income/income_page.dart';
+import 'package:caixabios/app/modules/workspace/workspace_view.dart';
 import 'package:caixabios/app/repositories/cash_flow_repository.dart';
 import 'package:caixabios/cash_flow_routes.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +79,12 @@ final app = GetMaterialApp.router(
     GetPage(
         name: CashFlowRoutes.home,
         page: () => HomePage(),
+        binding: BindingsBuilder(() {
+          Get.lazyPut(() => CashFlowRepository());
+        })),
+    GetPage(
+        name: CashFlowRoutes.workspace,
+        page: () => WorkspaceView(),
         binding: BindingsBuilder(() {
           Get.lazyPut(() => CashFlowRepository());
         }),
