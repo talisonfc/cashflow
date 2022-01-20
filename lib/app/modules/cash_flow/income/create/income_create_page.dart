@@ -60,6 +60,7 @@ class IncomeCreatePage extends GetView<IncomeCreateController> {
                             TextButton(
                                 onPressed: () {
                                   controller.save();
+                                  CashFlowRoutes.back();
                                   // TODO: save
                                   // repository.cashFlowModel
                                   //     .addIncome(incomeModel);

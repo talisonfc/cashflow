@@ -43,7 +43,17 @@ class IncomeController extends GetxController
   void deleteIncomeById(String incomeId) {
     final docRef = FirebaseFirestore.instance
         .doc('cashflow/$cashFlowId/incomes/$incomeId');
-    docRef.delete();
+    docRef.delete().then((_){
+      change(state!.where((ic) => ic.id! != incomeId).toList(), status: RxStatus.success());
+      cashFlowController.updateIncomes(state!);
+    }).catchError((){
+      // TODO: nofity about erro
+    });
+  }
+
+  void deleteAll(){
+    final ids = state!.map((ic)=>ic.id).toList();
+    ids.forEach((id)=>deleteIncomeById(id!));
   }
 
   IncomeModel currentIncome = IncomeModel();

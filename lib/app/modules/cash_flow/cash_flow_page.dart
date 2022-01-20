@@ -28,7 +28,7 @@ class CashFlowPage extends GetView<CashFlowController> {
         length: 2,
         child: WillPopScope(
           onWillPop: () async {
-            CashFlowRoutes.toHome();
+            CashFlowRoutes.toWorkspace();
             return false;
           },
           child: Scaffold(
@@ -76,12 +76,15 @@ class CashFlowPage extends GetView<CashFlowController> {
                 if (!filter)
                   TextButton(
                     onPressed: () {
-                      CloseCashFlowAction(cashFlow: controller.cashFlowRepository.cashFlowModel, onCancel: (){
-                        // TODO: implementar
-                        CashFlowRoutes.back();
-                      }, onSave: (){
-                        // TODO: implementar
-                      })(context);
+                      CloseCashFlowAction(
+                          cashFlow: controller.cashFlowRepository.cashFlowModel,
+                          onCancel: () {
+                            // TODO: implementar
+                            CashFlowRoutes.back();
+                          },
+                          onSave: () {
+                            // TODO: implementar
+                          })(context);
                     },
                     child: Text(
                       "Fechar caixa",
@@ -91,15 +94,16 @@ class CashFlowPage extends GetView<CashFlowController> {
                   )
               ],
             ),
-            body: controller.obx((state) => TabBarView(
-              children: [
-                IncomePage(
-                  hideAddBtn: filter,
-                  hideRemoveBtn: filter
-                ),
-                ExpensePage(hideAddBtn: filter, hideRemoveBtn: filter)
-              ],
-            ), onLoading: Center(child: CircularProgressIndicator.adaptive(),)),
+            body: Obx(() => !controller.initializing.value
+                ? TabBarView(
+                    children: [
+                      IncomePage(hideAddBtn: filter, hideRemoveBtn: filter),
+                      ExpensePage(hideAddBtn: filter, hideRemoveBtn: filter)
+                    ],
+                  )
+                : Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )),
           ),
         ));
   }

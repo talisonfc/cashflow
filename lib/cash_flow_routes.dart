@@ -14,6 +14,7 @@ class CashFlowRoutes {
   static String batchIncom = '/batch';
   static String expense = '/expense';
   static String addExpense = '/add';
+  static String auth = '/auth';
 
   static String homePath = '$home';
   static String cashflowPath = '$homePath$cashflow';
@@ -25,7 +26,7 @@ class CashFlowRoutes {
   }
 
   static void back() {
-    Get.rootDelegate.popRoute();
+    Get.back();
   }
 
   static toHome(){
@@ -34,6 +35,10 @@ class CashFlowRoutes {
 
   static toWorkspace(){
     Get.rootDelegate.toNamed(workspace);
+  }
+
+  static toAuth(){
+    Get.rootDelegate.toNamed(auth);
   }
 
   static toCashFlow(DateTime dateTime) {

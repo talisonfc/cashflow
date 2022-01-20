@@ -25,8 +25,8 @@ class IncomeCreateController extends GetxController
     change(model, status: RxStatus.success());
   }
 
-  void save() {
-    collectionReference.add(state!.toJson()).then((value) {
+  Future save() {
+    return collectionReference.add(state!.toJson()).then((value) {
       initModel();
     }).catchError((error) {
       // TODO: tratar error

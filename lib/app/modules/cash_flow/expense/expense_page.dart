@@ -119,16 +119,16 @@ class ExpensePage extends GetView<ExpenseController> {
                 title: "Despesas do dia",
                 textValueColor: Theme.of(context).hintColor,
                 text:
-                    "R\$ ${controller.cashFlowController.state!.totalExpense.toStringAsFixed(2)}\n",
+                    "R\$ ${controller.cashFlowController.currentCashFlow.value.totalExpense.toStringAsFixed(2)}\n",
                 adicionalInfos: [
                   TextSpan(text: "Caixa do dia\n", style: hintStyle),
                   TextSpan(
                       text:
-                          "R\$ ${controller.cashFlowController.state!.expenseFromLocal.toStringAsFixed(2)}\n"),
+                          "R\$ ${controller.cashFlowController.currentCashFlow.value.expenseFromLocal.toStringAsFixed(2)}\n"),
                   TextSpan(text: "Caixa geral\n", style: hintStyle),
                   TextSpan(
                       text:
-                          "R\$ ${controller.cashFlowController.state!.expenseFromGeral.toStringAsFixed(2)}\n"),
+                          "R\$ ${controller.cashFlowController.currentCashFlow.value.expenseFromGeral.toStringAsFixed(2)}\n"),
                 ],
               )
             ],

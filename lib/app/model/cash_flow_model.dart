@@ -65,8 +65,8 @@ class CashFlowModel {
       "createdAt": createdAt.millisecondsSinceEpoch,
       "valueLastDay": valueLastDay,
       "valueToNextDay": valueToNextDay,
-      "incomes": incomes.map((it) => it.toJson()).toList(),
-      "expenses": expenses.map((it) => it.toJson()).toList()
+      // "incomes": incomes.map((it) => it.toJson()).toList(),
+      // "expenses": expenses.map((it) => it.toJson()).toList()
     };
   }
 

@@ -12,14 +12,10 @@ class IncomePage extends GetView<IncomeController> {
   final bool hideAddBtn;
   final bool hideRemoveBtn;
 
-  IncomePage({
-    this.hideAddBtn = false,
-    this.hideRemoveBtn = false
-  });
+  IncomePage({this.hideAddBtn = false, this.hideRemoveBtn = false});
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -59,9 +55,7 @@ class IncomePage extends GetView<IncomeController> {
                             );
                           }).then((v) {
                         if (v != null && v) {
-                          // TODO: limpar todas as entradas
-                          // repository.cashFlowModel.incomes.clear();
-                          // repository.save();
+                          controller.deleteAll();
                         }
                       });
                     },
@@ -103,10 +97,7 @@ class IncomePage extends GetView<IncomeController> {
                                       );
                                     }).then((confirm) {
                                   if (confirm != null) {
-                                    controller.cashFlowRepository.cashFlowModel
-                                        .incomes
-                                        .remove(ic);
-                                    controller.cashFlowRepository.save();
+                                    controller.deleteIncomeById(ic.id!);
                                   }
                                 });
                               },
@@ -144,7 +135,12 @@ class IncomePage extends GetView<IncomeController> {
               ),
             ),
           ),
-          IncomeResume(cashFlowModel: controller.cashFlowController.state!,)
+          Obx(() => IncomeResume(
+                cashFlowModel:
+                    controller.cashFlowController.currentCashFlow.value,
+                onValueLastDayChanged: controller.cashFlowController.updateValueLastDay,
+                onValueNextDayChanged: controller.cashFlowController.updateValueToNextDay,
+              ))
         ],
       ),
     );

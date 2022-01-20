@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 class HomePage extends GetView<CashFlowRepository> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: ListView(
         children: [
@@ -27,7 +25,7 @@ class HomePage extends GetView<CashFlowRepository> {
                     children: [
                       OutlinedButton(
                         onPressed: () {
-                          CashFlowRoutes.toWorkspace();
+                          CashFlowRoutes.toAuth();
                         },
                         child: Text('Acesso restrito'),
                         style: ButtonStyle(
@@ -101,7 +99,39 @@ class HomePage extends GetView<CashFlowRepository> {
                   aspectRatio: 1,
                   child: Card(
                     color: Colors.blue[100],
-                    child: Center(child: Text('Noticia $index'),),
+                    child: Center(
+                      child: Text('Noticia $index'),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+          SizedBox(height: 16,),
+          Container(
+            color: Colors.black,
+            child: Center(
+              child: Builder(builder: (context) {
+                final textStyle = Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Colors.white);
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListView(
+                    shrinkWrap: true,
+                    primary: false,
+                    children: [
+                      MediaInfo(Icons.facebook, 'biosdiagnostico',
+                          textStyle: textStyle),
+                      MediaInfo(Icons.email, 'biosdiagnostico@gmail.com',
+                          textStyle: textStyle),
+                      MediaInfo(Icons.phone, '(83) 91828-9292',
+                          textStyle: textStyle),
+                      MediaInfo(Icons.location_on,
+                          'Rua Francisco Leão Veloso, SN, Uiraúna-PB, 58915-000',
+                          textStyle: textStyle)
+                    ],
                   ),
                 );
               }),
@@ -110,7 +140,23 @@ class HomePage extends GetView<CashFlowRepository> {
         ],
       ),
     );
+  }
 
-    
+  Widget MediaInfo(IconData iconData, String description,
+      {TextStyle? textStyle, Color textColor = Colors.white}) {
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      alignment: WrapAlignment.center,
+      children: [
+        Icon(
+          iconData,
+          color: textColor,
+        ),
+        Text(
+          description,
+          style: textStyle,
+        )
+      ],
+    );
   }
 }

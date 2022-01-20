@@ -1,5 +1,6 @@
 import 'dart:js';
 
+import 'package:caixabios/app/modules/auth/auth_microfront.dart';
 import 'package:caixabios/app/modules/home/home_page.dart';
 import 'package:caixabios/app/modules/cash_flow/cash_flow_bindings.dart';
 import 'package:caixabios/app/modules/cash_flow/cash_flow_page.dart';
@@ -30,18 +31,30 @@ final themeData = ThemeData(
   primarySwatch: Colors.blue,
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
-      padding: MaterialStateProperty.all(
-        EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-      ),
-    ),
+        padding: MaterialStateProperty.all(
+      EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+    )),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+        padding: MaterialStateProperty.all(
+          EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+        ),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+          ),
+        )),
   ),
   textTheme: TextTheme(
-      // headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-      // headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-      // bodyText2: TextStyle(fontSize: 20.0, fontFamily: 'Hind'),
-      // bodyText1: TextStyle(fontSize: 20.0, fontFamily: 'Hind'),
-      // button: TextStyle(fontSize: 20.0, fontFamily: 'Hind'),
-      ),
+    headline1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+    headline6: TextStyle(fontSize: 16.0, fontStyle: FontStyle.normal),
+    bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+    bodyText1: TextStyle(fontSize: 16.0, fontFamily: 'Hind'),
+    button: TextStyle(fontSize: 16.0, fontFamily: 'Hind'),
+  ),
 );
 
 final app = GetMaterialApp.router(
@@ -82,6 +95,11 @@ final app = GetMaterialApp.router(
         binding: BindingsBuilder(() {
           Get.lazyPut(() => CashFlowRepository());
         })),
+    AuthMicroFront().page(
+        name: CashFlowRoutes.auth,
+        onAfterLogin: () {
+          CashFlowRoutes.toWorkspace();
+        }) as GetPage,
     GetPage(
         name: CashFlowRoutes.workspace,
         page: () => WorkspaceView(),
