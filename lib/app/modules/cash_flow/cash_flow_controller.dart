@@ -15,6 +15,9 @@ class CashFlowController extends GetxController {
   Rx<CashFlowModel> currentCashFlow =
       Rx(CashFlowModel(createdAt: DateTime.now()));
 
+  RxList<CashFlowModel> flows = RxList.empty();
+  CashFlowModel? selectedCashFlow;
+
   final initializing = true.obs;
 
   @override
@@ -22,8 +25,19 @@ class CashFlowController extends GetxController {
     super.onInit();
     var cashFlowId = ReadCashFlowIdAction().call();
     final firestore = FirebaseFirestore.instance;
-    
+
     documentReference = firestore.doc('cashflow/$cashFlowId');
+
+    final dt30daysAgo = DateTime.now().subtract(Duration(days: 30));
+    firestore
+        .collection('cashflow')
+        .where('createdAt', isGreaterThan: dt30daysAgo.millisecondsSinceEpoch)
+        .get()
+        .then((snapshot) {
+      flows.value = snapshot.docs.map((doc) {
+        return CashFlowModel.fromJson(doc.data())..id;
+      }).toList();
+    });
 
     final snapshot = await documentReference.get();
     if (snapshot.exists) {

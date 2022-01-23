@@ -9,71 +9,66 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 class WorkspaceView extends GetView<CashFlowRepository> {
-
   void openDailyCashFlow(BuildContext context, CashFlowRepository repository) {
-    if (repository.cashFlowModel.valueLastDay != null) {
-      final today = DateTime.now();
-      CashFlowRoutes.toCashFlow(today);
-    }
-    // Navigator.push(
-    //     context, MaterialPageRoute(builder: (ctx) => CashFlowPage()));
-    else
-      showDialog(
-          context: context,
-          builder: (ctx) {
-            return SimpleDialog(
-              title: Text("Qual o saldo do dia anterior?"),
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                  child: FotonicaTextField(
-                    placeholder: "Saldo",
-                    type: TextInputType.number,
-                    inputFormatters: [InputFormatters.number()],
-                    controller: TextEditingController(
-                        text: repository.cashFlowModel.valueLastDay.toString()),
-                    onChange: (v) {
-                      repository.cashFlowModel.valueLastDay = double.parse(v);
-                    },
-                    focusNode: FocusNode(),
-                    label: 'Label',
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FotonicaElevatedButton(
-                        label: "Cancelar",
-                        color: Theme.of(context).errorColor,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      FotonicaElevatedButton(
-                        label: "Continuar",
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (ctx) => CashFlowPage()));
-                        },
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          });
+    final today = DateTime.now();
+    CashFlowRoutes.toCashFlow(today);
+
+    // showDialog(
+    //     context: context,
+    //     builder: (ctx) {
+    //       return SimpleDialog(
+    //         title: Text("Qual o saldo do dia anterior?"),
+    //         children: [
+    //           Padding(
+    //             padding: EdgeInsets.symmetric(horizontal: 32),
+    //             child: FotonicaTextField(
+    //               placeholder: "Saldo",
+    //               type: TextInputType.number,
+    //               inputFormatters: [InputFormatters.number()],
+    //               controller: TextEditingController(
+    //                   text: repository.cashFlowModel.valueLastDay.toString()),
+    //               onChange: (v) {
+    //                 repository.cashFlowModel.valueLastDay = double.parse(v);
+    //               },
+    //               focusNode: FocusNode(),
+    //               label: 'Label',
+    //             ),
+    //           ),
+    //           Padding(
+    //             padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: [
+    //                 FotonicaElevatedButton(
+    //                   label: "Cancelar",
+    //                   color: Theme.of(context).errorColor,
+    //                   onPressed: () {
+    //                     Navigator.pop(context);
+    //                   },
+    //                 ),
+    //                 FotonicaElevatedButton(
+    //                   label: "Continuar",
+    //                   onPressed: () {
+    //                     Navigator.pop(context);
+    //                     Navigator.push(
+    //                         context,
+    //                         MaterialPageRoute(
+    //                             builder: (ctx) => CashFlowPage()));
+    //                   },
+    //                 ),
+    //               ],
+    //             ),
+    //           )
+    //         ],
+    //       );
+    //     });
   }
 
   @override
   Widget build(BuildContext context) {
     TextStyle bodyText1 =
         Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 20);
-    
+
     return Scaffold(
         body: Center(
       child: Wrap(
@@ -106,12 +101,13 @@ class WorkspaceView extends GetView<CashFlowRepository> {
               Card(
                 child: TextButton.icon(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (ctx) => CashFlowPage(
-                                  filter: true,
-                                )));
+                    CashFlowRoutes.toCashFlowSearch();
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (ctx) => CashFlowPage(
+                    //               filter: true,
+                    //             )));
                   },
                   label: Padding(
                     padding: const EdgeInsets.all(8.0),

@@ -1,7 +1,10 @@
+import 'package:caixabios/app/modules/auth/presenter/auth_controller.dart';
 import 'package:caixabios/fotonica_ui_components/fotonica_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends GetView<AuthController> {
   final Function() goToRegister;
   final Function() goToResetPassword;
   final Function() onSignIn;
@@ -21,7 +24,8 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.all(16),
         width: 500,
         // height: 500,
-        child: Form(
+        child: ReactiveForm(
+          formGroup: controller.loginForm,
           child: ListView(
             primary: false,
             shrinkWrap: true,
@@ -39,14 +43,20 @@ class LoginPage extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              FotonicaTextField(
-                label: 'E-mail',
+              ReactiveTextField(
+                formControlName: 'email',
+                decoration: InputDecoration(
+                    hintText: 'Digite seu e-mail',
+                    label: Text('E-mail')),
               ),
               SizedBox(
                 height: 8,
               ),
-              FotonicaTextField(
-                label: 'Senha',
+              ReactiveTextField(
+                formControlName: 'password',
+                decoration: InputDecoration(
+                    hintText: 'Digite sua senha', label: Text('Senha')),
+                obscureText: true,
               ),
               SizedBox(
                 height: 16,
@@ -56,7 +66,12 @@ class LoginPage extends StatelessWidget {
                   onPressed: goToResetPassword,
                   child: Text('Esqueceu a senha?')),
               TextButton(
-                  onPressed: goToRegister, child: Text('Fazer cadastro')),
+                  onPressed: () {
+                    print(controller.loginForm.value);
+                    print(controller.loginForm.valid);
+                    goToRegister();
+                  },
+                  child: Text('Fazer cadastro')),
               // SizedBox(
               //   height: 16,
               // ),

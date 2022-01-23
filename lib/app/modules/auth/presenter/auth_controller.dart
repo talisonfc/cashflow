@@ -1,11 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 class AuthController extends GetxController {
   late FirebaseAuth firebaseAuth;
 
   String email = '';
   String password = '';
+
+  final loginForm = FormGroup({
+    'email': FormControl(validators: [Validators.required, Validators.email]),
+    'password': FormControl(validators: [Validators.required])
+  });
+
+  final resetForm = FormGroup({
+    'email': FormControl(validators: [Validators.required, Validators.email])
+  });
 
   @override
   void onInit() {

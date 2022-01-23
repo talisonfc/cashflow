@@ -57,6 +57,26 @@ final themeData = ThemeData(
   ),
 );
 
+// final cashflowSubmenus = [GetPage(
+//                     name: '${CashFlowRoutes.income}${CashFlowRoutes.addIncome}',
+//                     transition: Transition.fadeIn,
+//                     opaque: false,
+//                     page: () => IncomeCreatePage(),
+//                     binding: IncomeCreateBindings()),
+//                 GetPage(
+//                     name:
+//                         '${CashFlowRoutes.income}${CashFlowRoutes.batchIncome}',
+//                     transition: Transition.fadeIn,
+//                     opaque: false,
+//                     page: () => IncomeBatchPage()),
+//                 GetPage(
+//                     name:
+//                         '${CashFlowRoutes.expense}${CashFlowRoutes.addExpense}',
+//                     opaque: false,
+//                     transition: Transition.fadeIn,
+//                     page: () => ExpenseCreatePage(),
+//                     binding: ExpenseCreateBindings())];
+
 final app = GetMaterialApp.router(
   // home: Container(),
   title: 'Flutter Demo',
@@ -110,32 +130,19 @@ final app = GetMaterialApp.router(
           GetPage(
               name: CashFlowRoutes.cashflow,
               page: () => CashFlowPage(),
-              // participatesInRootNavigator: true,
               binding: CashFlowBindings(),
               bindings: [IncomeBindings(), ExpenseBindings()],
               transition: Transition.noTransition,
-              opaque: false,
-              children: [
-                GetPage(
-                    name: '${CashFlowRoutes.income}${CashFlowRoutes.addIncome}',
-                    transition: Transition.fadeIn,
-                    opaque: false,
-                    page: () => IncomeCreatePage(),
-                    binding: IncomeCreateBindings()),
-                GetPage(
-                    name:
-                        '${CashFlowRoutes.income}${CashFlowRoutes.batchIncom}',
-                    transition: Transition.fadeIn,
-                    opaque: false,
-                    page: () => IncomeBatchPage()),
-                GetPage(
-                    name:
-                        '${CashFlowRoutes.expense}${CashFlowRoutes.addExpense}',
-                    opaque: false,
-                    transition: Transition.fadeIn,
-                    page: () => ExpenseCreatePage(),
-                    binding: ExpenseCreateBindings())
-              ]),
+              opaque: false),
+          GetPage(
+              name: CashFlowRoutes.cashflowSearch,
+              page: () => CashFlowPage(
+                    filter: true,
+                  ),
+              binding: CashFlowBindings(),
+              bindings: [IncomeBindings(), ExpenseBindings()],
+              transition: Transition.noTransition,
+              opaque: false),
         ])
   ],
 );

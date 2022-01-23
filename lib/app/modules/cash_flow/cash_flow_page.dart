@@ -37,7 +37,7 @@ class CashFlowPage extends GetView<CashFlowController> {
                   ? CashFlowTitle(
                       repository: controller.cashFlowRepository,
                     )
-                  : CashFlowSearch(repository: controller.cashFlowRepository),
+                  : CashFlowSearch(),
               bottom: TabBar(
                 // onTap: (index){
                 //   switch(index){

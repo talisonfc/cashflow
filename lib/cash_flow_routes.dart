@@ -7,11 +7,12 @@ class CashFlowRoutes {
   static String initial = '/app';
   static String home = '/home';
   static String workspace = '/workspace';
-  static String cashflow = '/cashflow/:$cashFlowId';
+  static String cashflow = '/cashflow/update/:$cashFlowId';
+  static String cashflowSearch = '/cashflow/search';
   static String income = '/income';
   static String addIncome = '/add';
   static String editIncome = '/:$incomeId';
-  static String batchIncom = '/batch';
+  static String batchIncome = '/batch';
   static String expense = '/expense';
   static String addExpense = '/add';
   static String auth = '/auth';
@@ -21,9 +22,11 @@ class CashFlowRoutes {
   static String incomePath = '$cashflowPath$income';
   static String expensePath = '$cashflowPath$expense';
 
-  static String _cashflowRoute(String _cashFlowId) {
+  static String _cashflowPath(String _cashFlowId) {
     return '$workspace${cashflow.replaceAll(':$cashFlowId', _cashFlowId)}';
   }
+
+  static String _cashflowSearchPath = '$workspace$cashflowSearch';
 
   static void back() {
     Get.back();
@@ -45,35 +48,39 @@ class CashFlowRoutes {
     int day = dateTime.day;
     int month = dateTime.month;
     int year = dateTime.year;
-    Get.rootDelegate.toNamed(_cashflowRoute('$day-$month-$year'));
+    Get.rootDelegate.toNamed(_cashflowPath('$day-$month-$year'));
+  }
+
+  static toCashFlowSearch(){
+    Get.rootDelegate.toNamed(_cashflowSearchPath);
   }
 
   static toIncome(GetDelegate delegate, String _cashFlowId) {
-    delegate.toNamed('${_cashflowRoute(_cashFlowId)}$income');
+    delegate.toNamed('${_cashflowPath(_cashFlowId)}$income');
   }
 
   static toExpense(GetDelegate delegate, String _cashFlowId) {
-    delegate.toNamed('${_cashflowRoute(_cashFlowId)}$expense');
+    delegate.toNamed('${_cashflowPath(_cashFlowId)}$expense');
   }
 
   static dynamic toAddExpense() async {
     final parameters = Get.parameters;
     String _cashFlowId = parameters[CashFlowRoutes.cashFlowId]!;
     return await Get.rootDelegate
-        .toNamed('${_cashflowRoute(_cashFlowId)}$expense$addExpense');
+        .toNamed('${_cashflowPath(_cashFlowId)}$expense$addExpense');
   }
 
   static dynamic toAddIncome() async {
     final parameters = Get.parameters;
     String _cashFlowId = parameters[CashFlowRoutes.cashFlowId]!;
     return await Get.rootDelegate
-        .toNamed('${_cashflowRoute(_cashFlowId)}$income$addIncome');
+        .toNamed('${_cashflowPath(_cashFlowId)}$income$addIncome');
   }
 
   static dynamic toBatchIncome() async {
     final parameters = Get.parameters;
     String _cashFlowId = parameters[CashFlowRoutes.cashFlowId]!;
     return await Get.rootDelegate
-        .toNamed('${_cashflowRoute(_cashFlowId)}$income$batchIncom');
+        .toNamed('${_cashflowPath(_cashFlowId)}$income$batchIncome');
   }
 }

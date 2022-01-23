@@ -73,41 +73,139 @@ class HomePage extends GetView<CashFlowRepository> {
           ),
           Container(
             height: 300,
-            color: Colors.grey[300],
+            color: Colors.blue[300],
             child: Center(
-              child: Text('Carroseu'),
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Container(
+                    width: 700,
+                    child: RichText(
+                      text: TextSpan(
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline3!
+                              .copyWith(color: Colors.white),
+                          children: [
+                            TextSpan(
+                                text: 'TUDO QUE VOCÊ PRECISA SABER SOBRE '),
+                            TextSpan(
+                                text: 'OS TESTES DE COVID-19\n',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: 'Agente cuida, ',
+                                style: TextStyle(fontSize: 20)),
+                            TextSpan(
+                                text: 'você confia',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                          ]),
+                    ),
+                  ),
+                  ElevatedButton(onPressed: () {}, child: Text('Saiba mais'))
+                ],
+              ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            child: Text(
-              'Noticias',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
+          SizedBox(
+            height: 16,
           ),
           Container(
             height: 300,
             padding: EdgeInsets.symmetric(horizontal: 32),
-            child: ListView(
-              primary: false,
-              scrollDirection: Axis.horizontal,
-              children: List.generate(10, (index) {
-                return AspectRatio(
-                  aspectRatio: 1,
-                  child: Card(
-                    color: Colors.blue[100],
-                    child: Center(
-                      child: Text('Noticia $index'),
-                    ),
+            child: Row(
+              children: [
+                Container(
+                  width: 200,
+                  child: ListView(
+                    shrinkWrap: true,
+                    primary: false,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline4!
+                              .copyWith(fontWeight: FontWeight.bold),
+                          children: [
+                            TextSpan(
+                                text: 'NOTÍCIAS\n',
+                                style:
+                                    TextStyle(fontSize: 24, color: Colors.red)),
+                            TextSpan(text: 'Confira as nossas novidades!')
+                          ],
+                        ),
+                      ),
+                      Container(
+                          width: 80,
+                          child: Divider(thickness: 4, color: Colors.red)),
+                      SizedBox(
+                        height: 16,
+                        width: 16,
+                      ),
+                      OutlinedButton(
+                          onPressed: () {}, child: Text('Ver todas notícias'))
+                    ],
                   ),
-                );
-              }),
+                ),
+                SizedBox(
+                  width: 32,
+                ),
+                Expanded(
+                  child: ListView(
+                    primary: false,
+                    scrollDirection: Axis.horizontal,
+                    children: List.generate(2, (index) {
+                      return AspectRatio(
+                        aspectRatio: 1,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(child: Container(
+                                  child: Placeholder(),
+                                )),
+                                SizedBox(height: 8,),
+                                RichText(
+                                  text: TextSpan(
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                      children: [
+                                        TextSpan(
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                            text:
+                                                'Horário de funcionamento - Feriado 25 de Janeiro / Aniversário de SP\n'),
+                                        TextSpan(
+                                            text:
+                                                'Confira os horários de funcionamento e coleta das unidades durante o feriado de 25 de janeiro.')
+                                      ]),
+                                ),
+                                SizedBox(height: 8,),
+                                InkWell(
+                                    onTap: () {},
+                                    child: Text(
+                                      'Leia mais',
+                                      style:
+                                          TextStyle(color: Colors.red),
+                                    ))
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                )
+              ],
             ),
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Container(
             color: Colors.black,
             child: Center(
