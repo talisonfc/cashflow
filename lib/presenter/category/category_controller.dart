@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -56,7 +56,7 @@ class CategoryController extends GetxController with StateMixin<CategoryState> {
     final item = formArray.value![index];
     final id = item!.control('id').value;
     final result = await deleteCategoryById(id);
-    if(result){
+    if (result) {
       formArray.removeAt(index);
     }
   }

@@ -11,9 +11,7 @@ class CategoryPage extends GetView<CategoryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Categorias'),
-      ),
+      appBar: AppBar(title: const Text('Categorias'), elevation: 0),
       body: controller.obx((state) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -28,14 +26,14 @@ class CategoryPage extends GetView<CategoryController> {
                       value: '', validators: [Validators.required]),
                 });
               },
-              onDeleteByIndex: (index){
+              onDeleteByIndex: (index) {
                 controller.deleteByIndex(index);
               },
               buildForm: (formGroup) {
                 return Expanded(
                   child: Wrap(
                     children: const [
-                      ReactiveInput(
+                      ReactiveTextFieldWidget(
                         label: 'Nome',
                         formControlName: 'name',
                       )
@@ -58,7 +56,7 @@ class CategoryPage extends GetView<CategoryController> {
             return ButtonWithLoading(
               label: 'Salvar',
               requestingLabel: 'Salvando...',
-              requesting: controller.isLoading.value,
+              loading: controller.isLoading.value,
               onPressed: () {
                 controller.save();
               },

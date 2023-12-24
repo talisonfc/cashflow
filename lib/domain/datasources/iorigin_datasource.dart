@@ -1,6 +1,4 @@
-
-
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 abstract class IOriginDatasource {
   Future<List<OriginEntity>> getOrigins();

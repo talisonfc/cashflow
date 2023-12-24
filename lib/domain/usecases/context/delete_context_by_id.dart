@@ -1,10 +1,10 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 abstract class IDeleteContextById {
   Future<bool> call(String id);
 }
 
-class DeleteContextById implements IDeleteContextById{
+class DeleteContextById implements IDeleteContextById {
   final IContextDatasource datasource;
 
   DeleteContextById(this.datasource);

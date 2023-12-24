@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'context.dart';

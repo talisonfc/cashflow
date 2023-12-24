@@ -1,5 +1,4 @@
-
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 abstract class IUpdateContexts {
   Future<List<ContextEntity>> call(List<ContextEntity> contexts);

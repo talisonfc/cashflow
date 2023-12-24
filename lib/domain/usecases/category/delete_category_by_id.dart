@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/datasources/datasources.dart';
+import 'package:cashflow/domain/datasources/_exports.dart';
 
 abstract class IDeleteCategoryById {
   Future<bool> call(String id);
@@ -7,7 +7,7 @@ abstract class IDeleteCategoryById {
 class DeleteCategoryById implements IDeleteCategoryById {
   final ICategoryDatasource datasource;
 
-  DeleteCategoryById(this.datasource);
+  DeleteCategoryById({required this.datasource});
 
   @override
   Future<bool> call(String id) async {

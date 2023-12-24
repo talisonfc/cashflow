@@ -1,0 +1,20 @@
+# This is a generated file; do not edit or check into version control.
+amplify_analytics_pinpoint=/Users/talisoncosta/.pub-cache/hosted/pub.dev/amplify_analytics_pinpoint-1.6.0/
+amplify_auth_cognito=/Users/talisoncosta/.pub-cache/hosted/pub.dev/amplify_auth_cognito-1.6.0/
+amplify_db_common=/Users/talisoncosta/.pub-cache/hosted/pub.dev/amplify_db_common-0.3.3/
+amplify_secure_storage=/Users/talisoncosta/.pub-cache/hosted/pub.dev/amplify_secure_storage-0.4.0+6/
+connectivity_plus=/Users/talisoncosta/.pub-cache/hosted/pub.dev/connectivity_plus-5.0.1/
+device_info_plus=/Users/talisoncosta/.pub-cache/hosted/pub.dev/device_info_plus-9.1.0/
+package_info_plus=/Users/talisoncosta/.pub-cache/hosted/pub.dev/package_info_plus-4.2.0/
+path_provider=/Users/talisoncosta/.pub-cache/hosted/pub.dev/path_provider-2.1.1/
+path_provider_android=/Users/talisoncosta/.pub-cache/hosted/pub.dev/path_provider_android-2.2.1/
+path_provider_foundation=/Users/talisoncosta/.pub-cache/hosted/pub.dev/path_provider_foundation-2.3.1/
+path_provider_linux=/Users/talisoncosta/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
+path_provider_windows=/Users/talisoncosta/.pub-cache/hosted/pub.dev/path_provider_windows-2.2.1/
+url_launcher=/Users/talisoncosta/.pub-cache/hosted/pub.dev/url_launcher-6.2.1/
+url_launcher_android=/Users/talisoncosta/.pub-cache/hosted/pub.dev/url_launcher_android-6.2.0/
+url_launcher_ios=/Users/talisoncosta/.pub-cache/hosted/pub.dev/url_launcher_ios-6.2.0/
+url_launcher_linux=/Users/talisoncosta/.pub-cache/hosted/pub.dev/url_launcher_linux-3.1.0/
+url_launcher_macos=/Users/talisoncosta/.pub-cache/hosted/pub.dev/url_launcher_macos-3.1.0/
+url_launcher_web=/Users/talisoncosta/.pub-cache/hosted/pub.dev/url_launcher_web-2.2.0/
+url_launcher_windows=/Users/talisoncosta/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.0/

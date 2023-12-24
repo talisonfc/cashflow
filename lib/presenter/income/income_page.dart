@@ -12,8 +12,8 @@ class IncomePage extends GetView<IncomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Entrada'),
-        ),
+        title: const Text('Entrada'),
+      ),
       body: controller.obx((state) {
         return ReactiveForm(
             formGroup: controller.form,
@@ -21,7 +21,7 @@ class IncomePage extends GetView<IncomeController> {
               shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                ReactiveInput(
+                ReactiveTextFieldWidget(
                   formControlName: 'name',
                   label: 'Nome',
                 ),
@@ -31,7 +31,7 @@ class IncomePage extends GetView<IncomeController> {
                     formControlName: 'when',
                     label: 'Data'),
                 OriginDropdown(),
-                ReactiveInput(
+                ReactiveTextFieldWidget(
                   formControlName: 'value',
                   label: 'Valor',
                   keyboardType: TextInputType.number,
@@ -47,9 +47,9 @@ class IncomePage extends GetView<IncomeController> {
             return ButtonWithLoading(
               label: 'Salvar',
               requestingLabel: 'Salvando...',
-              requesting: controller.isLoading.value,
+              loading: controller.isLoading.value,
               onPressed: () async {
-                if(await controller.save()){
+                if (await controller.save()) {
                   Get.back();
                 }
               },

@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import 'package:cashflow/presenter/presenter.dart';
 
 class ContextDropdownInputController

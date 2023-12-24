@@ -1,4 +1,3 @@
-
 class RouteName {
   static const category = '/category';
   static const home = '/home';
@@ -8,4 +7,7 @@ class RouteName {
   static const context = '/context';
   static const expense = '/expense';
   static const income = '/income';
+  static const auth = '/auth';
+  static const cashflowDetails = '/cashflow-details/:id';
+  static const userinfo = '/userinfo';
 }

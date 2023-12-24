@@ -1,5 +1,4 @@
-
-import '../domain.dart';
+import '../_exports.dart';
 
 abstract class ICategoryDatasource {
   Future<List<CategoryEntity>> read();

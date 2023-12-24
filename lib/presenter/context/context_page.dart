@@ -25,14 +25,14 @@ class ContextPage extends GetView<ContextController> {
                       value: '', validators: [Validators.required]),
                 });
               },
-              onDeleteByIndex: (index){
+              onDeleteByIndex: (index) {
                 controller.deleteByIndex(index);
               },
               buildForm: (formGroup) {
                 return Expanded(
                   child: Wrap(
                     children: const [
-                      ReactiveInput(
+                      ReactiveTextFieldWidget(
                         label: 'Nome',
                         formControlName: 'name',
                       )
@@ -54,7 +54,7 @@ class ContextPage extends GetView<ContextController> {
           child: Obx(() => ButtonWithLoading(
                 label: 'Salvar',
                 requestingLabel: 'Salvando...',
-                requesting: controller.isLoading.value,
+                loading: controller.isLoading.value,
                 onPressed: () {
                   controller.save();
                 },

@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 abstract class IGetContexts {
   Future<List<ContextEntity>> call();

@@ -1,9 +1,8 @@
 import 'package:cashflow/core/core.dart';
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import 'package:cashflow/external/context_datasource.dart';
 import 'package:get/get.dart';
 import 'context.dart';
-
 
 class ContextBindings extends Bindings {
   @override

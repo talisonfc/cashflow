@@ -10,9 +10,25 @@
             "type": "dart",
             "args": [
                 "-d",
-                // "chrome",
-                "RX8N20CJC6W"
+                "chrome",
+                // "35b7302c8b13e3d1de5448b35930f48f942714c2"
             ]
+        },
+        {
+            "name": "cashflow iphone",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug"
+        },
+        {
+            "name": "cashflow s20",
+            "request": "launch",
+            "args": [
+                "-d",
+                "RX8N20CJC6W"
+            ],
+            "type": "dart",
+            "flutterMode": "debug"
         },
         {
             "name": "cashflow (profile mode)",

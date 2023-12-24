@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cashflow/core/settings.dart';
 import 'package:http/http.dart' as http;
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 class OriginDatasource extends IOriginDatasource {
   final http.Client client = http.Client();

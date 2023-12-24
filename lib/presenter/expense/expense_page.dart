@@ -37,18 +37,18 @@ class ExpensePage extends GetView<ExpenseController> {
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     children: [
-                      const ReactiveInput(
+                      const ReactiveTextFieldWidget(
                           label: ExpenseLabel.DESCRIPTION,
                           formControlName: ExpenseConstants.DESCRIPTION),
                       ReactiveDateTimeInput(
                           label: ExpenseLabel.WHEN,
-                          firstDate: DateTime.now().subtract(const Duration(days: 265)),
-                          lastDate:
-                              DateTime.now(),
+                          firstDate: DateTime.now()
+                              .subtract(const Duration(days: 265)),
+                          lastDate: DateTime.now(),
                           formControlName: ExpenseConstants.WHEN),
                       CategoryDropdown(),
                       ContextDropdown(),
-                      const ReactiveInput(
+                      const ReactiveTextFieldWidget(
                           label: ExpenseLabel.VALUE,
                           keyboardType: TextInputType.number,
                           formControlName: ExpenseConstants.VALUE),
@@ -78,7 +78,7 @@ class ExpensePage extends GetView<ExpenseController> {
                         },
                         requestingLabel: 'Salvando...',
                         label: 'Salvar',
-                        requesting: controller.loading.value,
+                        loading: controller.loading.value,
                       )
                     ],
                   ),

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:origami/origami.dart';
-import 'home.dart';
+import '_exports.dart';
+import '../presenter.dart';
 
 class HomePage extends GetView<HomeController> {
   final items = <String, BottomNavigationBarItem>{
@@ -50,10 +51,108 @@ class HomePage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+        body: CustomScrollView(
+      slivers: [
+        SliverSafeArea(
+            sliver: SliverToBoxAdapter(
+                child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          // height: 150,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(RouteName.userinfo);
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      child: Stack(
+                        children: [
+                          ClipOval(
+                            child: Image.network(
+                              'https://avatars.githubusercontent.com/u/1006964?v=4',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                              top: 2,
+                              right: 2,
+                              child: Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSecondary),
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    shape: BoxShape.circle),
+                              ))
+                        ],
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.notifications_active_outlined,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ))
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Olá, Talison',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: Colors.white),
+              )
+            ],
+          ),
+        ))),
+        SliverPadding(
+          padding: EdgeInsets.all(16),
+          sliver: SliverList(
+              delegate: SliverChildListDelegate([
+            InkWell(
+              onTap: () {
+                CashflowDefinition.open(context);
+              },
+              child: Text(
+                '+ Novo fluxo de caixa',
+                textAlign: TextAlign.end,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall!
+                    .copyWith(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            const SizedBox(height: 16),
+            CashflowAvailables()
+          ])),
+        )
+      ],
+    ));
+
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
       child: Scaffold(
+        drawer: Drawer(
+          child: MenuPage(),
+        ),
         appBar: AppBar(
           title: const Text('Cash Flow'),
           actions: [
@@ -70,14 +169,8 @@ class HomePage extends GetView<HomeController> {
           ],
         ),
         body: controller.obx((state) {
-          return PageState(
-              type: PageStateType.empty,
-              title: 'Carregando...',
-            );
           return CashflowByYearView(
-            onMonthChanged: (month) {
-              controller.searchByMonth(month: month);
-            },
+            onMonthChanged: (month) {},
           );
         },
             onLoading: const Center(

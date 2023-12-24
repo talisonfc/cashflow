@@ -1,5 +1,5 @@
 import 'package:cashflow/core/settings.dart';
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import 'package:cashflow/external/origin_datasource.dart';
 import 'package:get/get.dart';
 import 'origin.dart';
@@ -11,8 +11,9 @@ class OriginBindings extends Bindings {
       Get.lazyPut<ISettings>(() => Settings());
     }
 
-    Get.lazyPut<IOriginDatasource>(() => OriginDatasource(settings: Get.find()));
-    
+    Get.lazyPut<IOriginDatasource>(
+        () => OriginDatasource(settings: Get.find()));
+
     Get.lazyPut<IGetOrigins>(() => GetOrigins(datasource: Get.find()));
 
     Get.lazyPut<IUpdateOrigins>(() => UpdateOrigins(datasource: Get.find()));

@@ -1,9 +1,8 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import '../../shared/shared.dart';
 
 class CategoryDropdownInputController
     extends DropdownInputController<CategoryEntity, String> {
-
   final IGetCategories getCategories;
 
   CategoryDropdownInputController({

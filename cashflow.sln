@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "amplify", "amplify", "{41F0BB48-071C-45B5-82AD-C344898155D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "#current-cloud-backend", "#current-cloud-backend", "{3AE0D2FE-1048-4E88-8A4B-25825865012B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "function", "function", "{5E60A682-CA07-48C2-A89E-80C55296C7C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "category", "category", "{62F2E977-D186-4A15-BA2A-114E0087031C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "category", "amplify\#current-cloud-backend\function\category\src\category.csproj", "{02656B8F-E303-49AF-9861-3A16FCDBAE6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{1A8451BC-6A75-4514-B68A-DBE5B0D81A1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "function", "function", "{9D4A77C5-313A-428F-BA73-32EC19412471}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "category", "category", "{DB56686E-08EB-4818-B252-09764C006D91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "category", "amplify\backend\function\category\src\category.csproj", "{54A534B8-681F-499C-84AF-A3136A8A6819}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02656B8F-E303-49AF-9861-3A16FCDBAE6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02656B8F-E303-49AF-9861-3A16FCDBAE6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02656B8F-E303-49AF-9861-3A16FCDBAE6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02656B8F-E303-49AF-9861-3A16FCDBAE6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54A534B8-681F-499C-84AF-A3136A8A6819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54A534B8-681F-499C-84AF-A3136A8A6819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54A534B8-681F-499C-84AF-A3136A8A6819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54A534B8-681F-499C-84AF-A3136A8A6819}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3AE0D2FE-1048-4E88-8A4B-25825865012B} = {41F0BB48-071C-45B5-82AD-C344898155D2}
+		{5E60A682-CA07-48C2-A89E-80C55296C7C1} = {3AE0D2FE-1048-4E88-8A4B-25825865012B}
+		{62F2E977-D186-4A15-BA2A-114E0087031C} = {5E60A682-CA07-48C2-A89E-80C55296C7C1}
+		{02656B8F-E303-49AF-9861-3A16FCDBAE6A} = {62F2E977-D186-4A15-BA2A-114E0087031C}
+		{1A8451BC-6A75-4514-B68A-DBE5B0D81A1A} = {41F0BB48-071C-45B5-82AD-C344898155D2}
+		{9D4A77C5-313A-428F-BA73-32EC19412471} = {1A8451BC-6A75-4514-B68A-DBE5B0D81A1A}
+		{DB56686E-08EB-4818-B252-09764C006D91} = {9D4A77C5-313A-428F-BA73-32EC19412471}
+		{54A534B8-681F-499C-84AF-A3136A8A6819} = {DB56686E-08EB-4818-B252-09764C006D91}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7DC972A6-C442-4646-BC09-820C07425683}
+	EndGlobalSection
+EndGlobal

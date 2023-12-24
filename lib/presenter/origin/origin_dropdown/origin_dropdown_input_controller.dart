@@ -1,8 +1,8 @@
-
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import 'package:cashflow/presenter/presenter.dart';
 
-class OriginDropdownInputController extends DropdownInputController<OriginEntity, String> {
+class OriginDropdownInputController
+    extends DropdownInputController<OriginEntity, String> {
   final IGetOrigins getOrigins;
 
   OriginDropdownInputController({

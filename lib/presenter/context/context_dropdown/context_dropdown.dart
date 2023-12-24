@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'context_dropdown_input_controller.dart';
 import 'context_dropdown_input.dart';
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 class ContextDrodownBindings extends Bindings {
   @override

@@ -1,5 +1,5 @@
 import 'package:cashflow/core/settings.dart';
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import 'package:cashflow/external/external.dart';
 import 'package:get/get.dart';
 import 'income.dart';

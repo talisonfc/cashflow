@@ -10,8 +10,7 @@ class OriginPage extends GetView<OriginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Origens')),
+        appBar: AppBar(title: const Text('Origens')),
         body: controller.obx((state) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -33,7 +32,7 @@ class OriginPage extends GetView<OriginController> {
                   return Expanded(
                     child: Wrap(
                       children: const [
-                        ReactiveInput(
+                        ReactiveTextFieldWidget(
                           label: 'Nome',
                           formControlName: 'name',
                         )
@@ -57,7 +56,7 @@ class OriginPage extends GetView<OriginController> {
               return ButtonWithLoading(
                 label: 'Salvar',
                 requestingLabel: 'Salvando...',
-                requesting: controller.isLoading.value,
+                loading: controller.isLoading.value,
                 onPressed: () {
                   controller.save();
                 },

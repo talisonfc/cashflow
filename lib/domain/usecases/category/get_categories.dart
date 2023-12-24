@@ -1,5 +1,4 @@
-
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 abstract class IGetCategories {
   Future<List<CategoryEntity>> call();
@@ -14,5 +13,4 @@ class GetCategories implements IGetCategories {
   Future<List<CategoryEntity>> call() async {
     return await datasource.read();
   }
-  
 }

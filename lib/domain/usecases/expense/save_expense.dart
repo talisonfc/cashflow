@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 abstract class ISaveExpense {
   Future<ExpenseEntity> call(ExpenseEntity expense);

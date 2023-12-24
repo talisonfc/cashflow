@@ -1,13 +1,10 @@
-
-
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 abstract class IDeleteOriginById {
   Future<bool> call(String id);
 }
 
 class DeleteOriginById implements IDeleteOriginById {
-
   final IOriginDatasource datasource;
 
   DeleteOriginById({required this.datasource});

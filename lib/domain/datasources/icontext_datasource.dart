@@ -1,4 +1,4 @@
-import '../domain.dart';
+import '../_exports.dart';
 
 abstract class IContextDatasource {
   Future<List<ContextEntity>> read();

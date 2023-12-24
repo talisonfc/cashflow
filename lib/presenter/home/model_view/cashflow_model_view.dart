@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 class CashflowByMonth {
   final List<ExpenseEntity> expenses;

@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import 'package:get/get.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -15,17 +15,21 @@ class IncomeController extends GetxController with StateMixin {
   });
 
   final isLoading = false.obs;
+  late String cashflowId;
 
   @override
   void onInit() {
     super.onInit();
+    final params = Get.parameters;
+    cashflowId = params['id'] ?? '';
     change(null, status: RxStatus.success());
   }
 
   Future<bool> save() async {
     try {
       isLoading.value = true;
-      await createIncome(IncomeEntity.fromFormGroup(form.value));
+      await createIncome(IncomeEntity.fromFormGroup(form.value)
+          .copyWith(cashflowId: cashflowId));
       isLoading.value = false;
       return true;
     } catch (e) {

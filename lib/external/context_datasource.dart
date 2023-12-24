@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cashflow/core/core.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 class ContextDatasource implements IContextDatasource {
   final http.Client client = http.Client();
@@ -20,8 +20,8 @@ class ContextDatasource implements IContextDatasource {
 
   @override
   Future<List<ContextEntity>> read() async {
-    final response = await client.get(
-        Uri.parse(settings.endpointByName(EndpointConstants.getContexts)));
+    final response = await client
+        .get(Uri.parse(settings.endpointByName(EndpointConstants.getContexts)));
     return mapContextsFromResponse(response);
   }
 

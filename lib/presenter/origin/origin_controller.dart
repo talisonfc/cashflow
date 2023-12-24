@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 import 'package:cashflow/presenter/origin/origin.dart';
 import 'package:get/get.dart';
 import 'package:reactive_forms/reactive_forms.dart';

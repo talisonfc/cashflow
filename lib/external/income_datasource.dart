@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:cashflow/core/settings.dart';
 import 'package:http/http.dart' as http;
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 class IncomeDatasource implements IIncomeDatasource {
   final client = http.Client();
@@ -12,10 +12,13 @@ class IncomeDatasource implements IIncomeDatasource {
   IncomeDatasource({required this.settings});
 
   @override
-  Future<List<IncomeEntity>> read(
-      {DateTime? startDate, DateTime? endDate}) async {
+  Future<List<IncomeEntity>> readByCashflow(
+      {required String cashflowId,
+      DateTime? startDate,
+      DateTime? endDate}) async {
     try {
       final params = {
+        "CashflowId": cashflowId,
         if (startDate != null) "StartDate": startDate.toUtc().toIso8601String(),
         if (endDate != null) "EndDate": endDate.toUtc().toIso8601String()
       };

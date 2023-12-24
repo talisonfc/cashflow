@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cashflow/core/settings.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 class ExpenseDatasource implements IExpenseDatasource {
   final http.Client client = http.Client();
@@ -13,10 +13,13 @@ class ExpenseDatasource implements IExpenseDatasource {
   ExpenseDatasource({required this.settings});
 
   @override
-  Future<List<ExpenseEntity>> read(
-      {DateTime? startDate, DateTime? endDate}) async {
+  Future<List<ExpenseEntity>> readByCashflow(
+      {required String cashflowId,
+      DateTime? startDate,
+      DateTime? endDate}) async {
     try {
       final params = {
+        "CashflowId": cashflowId,
         if (startDate != null) "StartDate": startDate.toUtc().toIso8601String(),
         if (endDate != null) "EndDate": endDate.toUtc().toIso8601String()
       };
@@ -63,6 +66,22 @@ class ExpenseDatasource implements IExpenseDatasource {
           jsonDecode(utf8.decode(response.bodyBytes)));
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  @override
+  Future<bool> deleteExpense(ExpenseEntity expense) async {
+    try {
+      await client.delete(
+          Uri.parse(settings
+              .endpointByName(EndpointConstants.deleteExpense)
+              .replaceAll('{id}', expense.id!)),
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8'
+          });
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

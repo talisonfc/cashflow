@@ -1,12 +1,11 @@
-import 'package:cashflow/presenter/home/home.dart';
-import 'package:cashflow/presenter/home/widgets/incomes_view.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:origami/origami.dart';
 import 'widgets.dart';
 
-class CashflowByMonthView extends GetView<HomeController> {
-  const CashflowByMonthView({super.key});
+class CashflowByMonthView extends StatelessWidget {
+  const CashflowByMonthView({super.key, required this.id});
+
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +19,8 @@ class CashflowByMonthView extends GetView<HomeController> {
                 child: Container(
                   padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .background
-                        .withOpacity(.2),
+                    color:
+                        Theme.of(context).colorScheme.secondary.withOpacity(.2),
                     borderRadius: BorderRadius.circular(32),
                   ),
                   child: TabBar(
@@ -36,6 +33,7 @@ class CashflowByMonthView extends GetView<HomeController> {
                     unselectedLabelColor:
                         Theme.of(context).colorScheme.secondary,
                     labelPadding: EdgeInsets.zero,
+                    splashBorderRadius: BorderRadius.circular(32),
                     tabs: [
                       Wrap(
                         children: [
@@ -51,14 +49,15 @@ class CashflowByMonthView extends GetView<HomeController> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Button(
-              //     label: 'Adicionar',
-              //     onPressed: () {},
-              //   ),
-              // ),
-              Expanded(child: TabBarView(children: [ExpensesView(), IncomesView()]))
+              Expanded(
+                  child: TabBarView(children: [
+                ExpensesView(
+                  id: '$id/EXPENSES',
+                ),
+                IncomesView(
+                  id: '$id/INCOMES',
+                )
+              ]))
             ],
           ),
         ));

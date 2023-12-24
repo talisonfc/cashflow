@@ -1,4 +1,4 @@
-import 'package:cashflow/domain/domain.dart';
+import 'package:cashflow/domain/_exports.dart';
 
 abstract class IUpdateCategories {
   Future<List<CategoryEntity>> call(List<CategoryEntity> categories);

@@ -1,6 +1,10 @@
-export 'home/home.dart';
+export 'home/_exports.dart';
 export 'category/category.dart';
 export 'context/context.dart';
 export 'expense/expense.dart';
 export 'shared/shared.dart';
 export 'origin/origin.dart';
+export 'menu/menu.dart';
+export 'cashflow_details/cashflow_details.dart';
+export 'cashflow_definition/cashflow_definition.dart';
+export 'userinfo/userinfo.dart';
